@@ -31,6 +31,11 @@
         }
     </script>
 <style>
+        /* Smooth scrolling for the entire document */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
         /* Custom scrollbar for webkit */
         ::-webkit-scrollbar {
             width: 8px;
@@ -58,10 +63,10 @@
 <h2 class="text-white text-xl font-bold tracking-tight">LuxeStay</h2>
 </div>
 <div class="hidden lg:flex items-center gap-8">
-<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Home</a>
-<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Rooms</a>
-<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Amenities</a>
-<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Contact</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#home">Home</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#rooms">Rooms</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#amenities">Amenities</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#contact">Contact</a>
 </div>
 <div class="flex gap-3">
 <button class="hidden sm:flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-bold h-10 px-6 transition-all">
@@ -74,7 +79,7 @@
 </div>
 </div>
 <!-- Main Content Wrapper -->
-<div class="pt-20">
+<div class="pt-20" id="home">
 <!-- Hero Section -->
 <div class="relative min-h-[90vh] w-full flex items-center justify-center p-4">
 <!-- Background Image with Overlay -->
@@ -98,10 +103,10 @@
 <a href="booking.html" class="flex items-center justify-center rounded-full bg-primary hover:bg-primary/90 text-background-dark text-base font-bold h-14 px-8 min-w-[200px] transition-all shadow-lg shadow-primary/20">
                         Book Your Stay
                     </a>
-<button class="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-base font-bold h-14 px-8 min-w-[200px] transition-all group">
+<a href="#rooms" class="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-base font-bold h-14 px-8 min-w-[200px] transition-all group">
 <span>Explore Rooms</span>
 <span class="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-</button>
+</a>
 </div>
 </div>
 </div>
@@ -199,15 +204,15 @@
 </div>
 </div>
 <div class="pt-6">
-<button class="text-primary hover:text-white font-bold inline-flex items-center gap-2 transition-colors">
+<a href="#home" class="text-primary hover:text-white font-bold inline-flex items-center gap-2 transition-colors">
                             Read Our Story <span class="material-symbols-outlined">arrow_right_alt</span>
-</button>
+</a>
 </div>
 </div>
 </div>
 </div>
 <!-- Rooms & Suites Section -->
-<div class="w-full px-4 py-20 bg-surface-dark">
+<div class="w-full px-4 py-20 bg-surface-dark" id="rooms">
 <div class="max-w-[1280px] mx-auto">
 <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
 <div>
@@ -385,7 +390,7 @@
 </div>
 </div>
 <!-- Amenities Grid -->
-<div class="w-full px-4 py-20 bg-surface-dark">
+<div class="w-full px-4 py-20 bg-surface-dark" id="amenities">
 <div class="max-w-[1280px] mx-auto">
 <h2 class="text-white text-3xl font-bold mb-10">Premium Amenities</h2>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[500px]">
@@ -530,7 +535,7 @@
 </div>
 </div>
 <!-- Location & Contact -->
-<div class="w-full bg-background-dark relative">
+<div class="w-full bg-background-dark relative" id="contact">
 <div class="w-full h-[400px] opacity-60 grayscale hover:grayscale-0 transition-all duration-500" data-alt="Minimalist map of the hotel location" data-location="New York, USA" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBs97h4UEi_5-IevPI0rbJXy4jkqLGBRbl9qrllio8jyZRPsvJIIjuRhhGSAYWwSSY_fgzJ-WQHlHnC3z2PLhNgjpEnVWhvBUQ17qaorxatu6n2E3baekweM1EEG51PBmN_CM9Z2lNg06jh5Mpl5jF6hzrq9hb6W53sSfXJCKT0-zO3w-zZVpD12O_YNiTbHaN_nEU13qKjWI8OrqF8DESIYg4Oh7uIMsEE5ZqWme835KbXLT4alNOM-PdvWQw8Re3t65effDxKjRBQ'); background-size: cover; background-position: center;">
 <div class="w-full h-full bg-background-dark/20 backdrop-blur-[1px]"></div>
 </div>
@@ -571,10 +576,10 @@
 <div>
 <h4 class="text-white font-bold mb-6">Quick Links</h4>
 <ul class="space-y-4 text-sm text-gray-400">
-<li><a class="hover:text-primary transition-colors" href="#">Home</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Rooms &amp; Suites</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Dining</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Spa</a></li>
+<li><a class="hover:text-primary transition-colors" href="#home">Home</a></li>
+<li><a class="hover:text-primary transition-colors" href="#rooms">Rooms &amp; Suites</a></li>
+<li><a class="hover:text-primary transition-colors" href="#amenities">Amenities</a></li>
+<li><a class="hover:text-primary transition-colors" href="#contact">Contact</a></li>
 </ul>
 </div>
 <div>
