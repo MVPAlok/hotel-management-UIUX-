@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Book Your Stay - LuxeStay</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5be830",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#152111",
+                        "surface-dark": "#1e261c",
+                        "surface-dark-lighter": "#2a3627",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #152111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3627;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5be830;
+        }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in-left { animation: slideInLeft 0.4s ease-out; }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .pulse-green { animation: pulse-green 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useContext, createContext, useReducer, useCallback } = React;
+
+        // Context for booking state management
+        const BookingContext = createContext();
+
+        const bookingReducer = (state, action) => {
+            switch(action.type) {
+                case 'SET_STAY_DETAILS':
+                    return { ...state, stayDetails: { ...state.stayDetails, ...action.payload } };
+                case 'SET_SELECTED_ROOM':
+                    return { ...state, selectedRoom: action.payload };
+                case 'SET_GUEST_DETAILS':
+                    return { ...state, guestDetails: { ...state.guestDetails, ...action.payload } };
+                case 'SET_PAYMENT':
+                    return { ...state, paymentDetails: { ...state.paymentDetails, ...action.payload } };
+                case 'SET_CURRENT_STEP':
+                    return { ...state, currentStep: action.payload };
+                case 'SET_CONFIRMATION':
+                    return { ...state, confirmation: action.payload };
+                case 'SET_LOADING':
+                    return { ...state, isLoading: action.payload };
+                case 'SET_ERROR':
+                    return { ...state, error: action.payload };
+                default:
+                    return state;
+            }
+        };
+
+        const initialState = {
+            currentStep: 1,
+            stayDetails: { checkIn: '', checkOut: '', adults: 1, children: 0 },
+            selectedRoom: null,
+            guestDetails: { firstName: '', lastName: '', email: '', phone: '', specialRequests: '' },
+            paymentDetails: { cardNumber: '', expiry: '', cvc: '' },
+            confirmation: null,
+            isLoading: false,
+            error: null,
+        };
+
+        const BookingProvider = ({ children }) => {
+            const [state, dispatch] = useReducer(bookingReducer, initialState);
+
+            return (
+                <BookingContext.Provider value={{ state, dispatch }}>
+                    {children}
+                </BookingContext.Provider>
+            );
+        };
+
+        const useBooking = () => {
+            const context = useContext(BookingContext);
+            if (!context) throw new Error('useBooking must be used within BookingProvider');
+            return context;
+        };
+
+        // Room Database
+        const roomsDatabase = [
+            { id: 1, name: 'Deluxe Ocean View', capacity: 2, price: 350, size: 45, amenities: ['wifi', 'tv', 'bathtub', 'ac'], image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOIyDBA25hOq5u9ljjTFcnHPSUUgiT9R8cvTUF6y7kvcOcvak5ENIn7VfaLWSklSVCVj4OvMEcvDwvcv6Qo1oa35gu88uJALMiHwrzKj2ZITyQFjAXdtKsm6V6aVEiemA7hgziCFikL3vMpJv_VcfaiPkkg_oLKJmPHse0IqmABvS1kBHRASinPWPdUAIFq9VOA76nSNDDpV3_MJ2OhJ-epFzk9Gx4GSQyJFHopDnIhB4uTDMaMw1OidPt-qCvaMGh8F0bH5k-4UPA' },
+            { id: 2, name: 'Executive Suite', capacity: 4, price: 550, size: 85, amenities: ['wifi', 'desk', 'kitchen'], image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCOSRw6tVpTWxQ6oMusx12X62vjZvogXqaxBQQA4X5NrYfUZBz6qx--3bfZmyR1cPrzSDNGd8yUAXgo6KhhcTr_UwYJHUCrfHOmae60ooAIcaIvTPmRfXxqOV-6wNuSa9--yJI4-iChssF9nhTb2rkZH-VFd7kOt7y_HAeffKXCAlQd4K7Ld2eiwo7-TZuqC5ULemfse3RGzufdWfgDUYlVCmuGB4-qC1_f-cdavgtQActlMLfC9EFnszxw2IMT5sTEoJnOEvoKPPYk' },
+            { id: 3, name: 'Premier Twin', capacity: 2, price: 280, size: 40, amenities: ['wifi', 'lock'], image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBt1AAPGpb8FxHTokJ8f_Wyv_LF2KO5jlS4GUb1H2W7Vlx0t0Ep_fWZ0L0Om52tP-YNfIIR9d-iqkurNoI8owowqk-glIX4JKWSAir-9C56Oc7wJykjSoQVDJ43KZZ94v6Hcp178x_1dNvzRarn-qcFP6eClQ2tnwvoUgH7oQCIyGMqgnWaOx4OWaiG9jQC40U-pmrScVQfjgaCAl9t4kq6P3Fkg1jhoMvJ_m1p1hB0101YwlLl9N7-Ki2uNmvTthrVhs4krxBieBC-' },
+            { id: 4, name: 'Standard Room', capacity: 2, price: 220, size: 35, amenities: ['wifi'], image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBt1AAPGpb8FxHTokJ8f_Wyv_LF2KO5jlS4GUb1H2W7Vlx0t0Ep_fWZ0L0Om52tP-YNfIIR9d-iqkurNoI8owowqk-glIX4JKWSAir-9C56Oc7wJykjSoQVDJ43KZZ94v6Hcp178x_1dNvzRarn-qcFP6eClQ2tnwvoUgH7oQCIyGMqgnWaOx4OWaiG9jQC40U-pmrScVQfjgaCAl9t4kq6P3Fkg1jhoMvJ_m1p1hB0101YwlLl9N7-Ki2uNmvTthrVhs4krxBieBC-' },
+        ];
+
+        // Navigation header
+        const BookingHeader = () => (
+            <div class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background-dark/80 border-b border-white/5">
+                <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3 text-white cursor-pointer hover:opacity-80" onClick={() => window.location.href = '/'}>
+                        <div class="text-primary">
+                            <span class="material-symbols-outlined text-4xl">diamond</span>
+                        </div>
+                        <h2 class="text-white text-xl font-bold tracking-tight">LuxeStay</h2>
+                    </div>
+                    <a href="/" class="text-gray-300 hover:text-primary transition-colors text-sm font-medium">← Back to Home</a>
+                </div>
+            </div>
+        );
+
+        // Step Indicator
+        const StepIndicator = ({ currentStep, totalSteps }) => (
+            <div class="flex items-center justify-between px-4 py-8 mb-12">
+                {[1, 2, 3, 4, 5].map((step) => (
+                    <React.Fragment key={step}>
+                        <div class="flex flex-col items-center flex-1">
+                            <div class={`
+                                w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm
+                                transition-all duration-300
+                                ${step < currentStep ? 'bg-primary text-background-dark shadow-lg shadow-primary/30' : 
+                                  step === currentStep ? 'bg-primary text-background-dark shadow-lg shadow-primary/50' : 
+                                  'bg-surface-dark border border-white/10 text-gray-400'}
+                            `}>
+                                {step < currentStep ? <span class="material-symbols-outlined">check</span> : step}
+                            </div>
+                            <span class={`text-xs mt-2 text-center font-medium ${step <= currentStep ? 'text-primary' : 'text-gray-500'}`}>
+                                {['Stay', 'Rooms', 'Guest', 'Pay', 'Done'][step - 1]}
+                            </span>
+                        </div>
+                        {step < 5 && (
+                            <div class={`h-0.5 flex-1 mx-2 transition-colors ${step < currentStep ? 'bg-primary' : 'bg-white/10'}`}></div>
+                        )}
+                    </React.Fragment>
+                ))}
+            </div>
+        );
+
+        // Step 1: Stay Details
+        const StayDetailsStep = () => {
+            const { state, dispatch } = useBooking();
+            const { stayDetails, error } = state;
+            const [localError, setLocalError] = useState('');
+
+            const handleChange = (field, value) => {
+                dispatch({ type: 'SET_STAY_DETAILS', payload: { [field]: value } });
+                setLocalError('');
+            };
+
+            const handleNext = () => {
+                setLocalError('');
+                const today = new Date().toISOString().split('T')[0];
+
+                if (!stayDetails.checkIn || !stayDetails.checkOut) {
+                    setLocalError('Please select both check-in and check-out dates');
+                    return;
+                }
+
+                if (stayDetails.checkOut <= stayDetails.checkIn) {
+                    setLocalError('Check-out date must be after check-in date');
+                    return;
+                }
+
+                if (stayDetails.checkIn < today) {
+                    setLocalError('Check-in date cannot be in the past');
+                    return;
+                }
+
+                if (parseInt(stayDetails.adults) + parseInt(stayDetails.children) === 0) {
+                    setLocalError('Please select at least one guest');
+                    return;
+                }
+
+                dispatch({ type: 'SET_CURRENT_STEP', payload: 2 });
+            };
+
+            return (
+                <div class="fade-in max-w-2xl mx-auto">
+                    <div class="bg-surface-dark border border-white/5 p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-8">Let's Plan Your Stay</h2>
+
+                        {localError && (
+                            <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-xl mb-6 flex items-start gap-3">
+                                <span class="material-symbols-outlined flex-shrink-0">error</span>
+                                <span>{localError}</span>
+                            </div>
+                        )}
+
+                        <div class="space-y-6">
+                            {/* Dates Row */}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-3">Check-in Date</label>
+                                    <input 
+                                        type="date" 
+                                        value={stayDetails.checkIn}
+                                        onChange={(e) => handleChange('checkIn', e.target.value)}
+                                        min={new Date().toISOString().split('T')[0]}
+                                        class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-3">Check-out Date</label>
+                                    <input 
+                                        type="date"
+                                        value={stayDetails.checkOut}
+                                        onChange={(e) => handleChange('checkOut', e.target.value)}
+                                        min={stayDetails.checkIn || new Date().toISOString().split('T')[0]}
+                                        class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition-colors"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Guests Row */}
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-3">Adults</label>
+                                    <select 
+                                        value={stayDetails.adults}
+                                        onChange={(e) => handleChange('adults', e.target.value)}
+                                        class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition-colors"
+                                    >
+                                        {[1, 2, 3, 4, 5, 6].map(n => <option key={n}>{n}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-white text-sm font-bold mb-3">Children</label>
+                                    <select 
+                                        value={stayDetails.children}
+                                        onChange={(e) => handleChange('children', e.target.value)}
+                                        class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none transition-colors"
+                                    >
+                                        {[0, 1, 2, 3, 4].map(n => <option key={n}>{n}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Info Box */}
+                            {stayDetails.checkIn && stayDetails.checkOut && (
+                                <div class="bg-white/5 border border-primary/30 rounded-lg p-4 flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-primary flex-shrink-0">info</span>
+                                    <div>
+                                        <p class="text-white text-sm font-bold mb-1">
+                                            {Math.ceil((new Date(stayDetails.checkOut) - new Date(stayDetails.checkIn)) / (1000 * 60 * 60 * 24))} nights
+                                        </p>
+                                        <p class="text-gray-400 text-xs">Total guests: {parseInt(stayDetails.adults) + parseInt(stayDetails.children)}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <button
+                            onClick={handleNext}
+                            class="w-full mt-8 h-12 rounded-full bg-primary hover:bg-primary/90 text-background-dark font-bold transition-all shadow-lg shadow-primary/20"
+                        >
+                            Continue to Rooms
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Step 2: Room Selection
+        const RoomSelectionStep = () => {
+            const { state, dispatch } = useBooking();
+            const { stayDetails, selectedRoom } = state;
+
+            const calculateNights = () => {
+                return Math.ceil((new Date(stayDetails.checkOut) - new Date(stayDetails.checkIn)) / (1000 * 60 * 60 * 24));
+            };
+
+            const nights = calculateNights();
+            const totalGuests = parseInt(stayDetails.adults) + parseInt(stayDetails.children);
+            const availableRooms = roomsDatabase.filter(room => room.capacity >= totalGuests);
+
+            const handleSelectRoom = (room) => {
+                dispatch({ type: 'SET_SELECTED_ROOM', payload: room });
+            };
+
+            const handleNext = () => {
+                if (!selectedRoom) {
+                    dispatch({ type: 'SET_ERROR', payload: 'Please select a room' });
+                    return;
+                }
+                dispatch({ type: 'SET_ERROR', payload: null });
+                dispatch({ type: 'SET_CURRENT_STEP', payload: 3 });
+            };
+
+            return (
+                <div class="fade-in">
+                    <h2 class="text-3xl font-bold text-white mb-8">Select Your Room</h2>
+
+                    {state.error && (
+                        <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-xl mb-6">
+                            {state.error}
+                        </div>
+                    )}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        {availableRooms.map(room => (
+                            <div
+                                key={room.id}
+                                onClick={() => handleSelectRoom(room)}
+                                class={`
+                                    cursor-pointer group bg-background-dark rounded-2xl overflow-hidden border-2 transition-all
+                                    duration-300 transform hover:scale-105
+                                    ${selectedRoom?.id === room.id ? 'border-primary shadow-2xl shadow-primary/30' : 'border-white/5 hover:border-white/10'}
+                                `}
+                            >
+                                <div class="relative h-48 overflow-hidden">
+                                    <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{backgroundImage: `url('${room.image}')`}}></div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 class="text-white text-xl font-bold">{room.name}</h3>
+                                            <p class="text-gray-500 text-sm mt-1">{room.capacity} Guests • {room.size}m²</p>
+                                        </div>
+                                        {selectedRoom?.id === room.id && (
+                                            <span class="bg-primary text-background-dark px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-sm">check</span>
+                                                Selected
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div class="flex gap-2 mb-4 flex-wrap">
+                                        {room.amenities.map(a => {
+                                            const icons = { 'wifi': 'wifi', 'tv': 'tv', 'bathtub': 'bathtub', 'ac': 'ac_unit', 'desk': 'desk', 'kitchen': 'kitchen', 'lock': 'lock' };
+                                            return <span key={a} class="material-symbols-outlined text-lg text-gray-400" title={a}>{icons[a]}</span>;
+                                        })}
+                                    </div>
+
+                                    <div class="border-t border-white/5 pt-4 flex justify-between items-end">
+                                        <div>
+                                            <p class="text-gray-400 text-xs mb-1">Total for {nights} night{nights > 1 ? 's' : ''}</p>
+                                            <p class="text-primary text-2xl font-bold">${room.price * nights}</p>
+                                        </div>
+                                        <p class="text-gray-500 text-sm">${room.price}/night</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button
+                            onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 1 })}
+                            class="flex-1 h-12 rounded-full border border-white/20 text-white font-bold hover:bg-white/5 transition-colors"
+                        >
+                            Back
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            class="flex-1 h-12 rounded-full bg-primary hover:bg-primary/90 text-background-dark font-bold transition-all shadow-lg shadow-primary/20"
+                        >
+                            Continue to Guest Details
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Step 3: Guest Details
+        const GuestDetailsStep = () => {
+            const { state, dispatch } = useBooking();
+            const { guestDetails, error } = state;
+            const [formError, setFormError] = useState('');
+
+            const handleChange = (field, value) => {
+                dispatch({ type: 'SET_GUEST_DETAILS', payload: { [field]: value } });
+                setFormError('');
+            };
+
+            const validateForm = () => {
+                if (!guestDetails.firstName.trim()) return 'First name is required';
+                if (!guestDetails.lastName.trim()) return 'Last name is required';
+                if (!guestDetails.email.includes('@')) return 'Valid email is required';
+                if (!guestDetails.phone.trim()) return 'Phone number is required';
+                return null;
+            };
+
+            const handleNext = () => {
+                const error = validateForm();
+                if (error) {
+                    setFormError(error);
+                    return;
+                }
+                setFormError('');
+                dispatch({ type: 'SET_CURRENT_STEP', payload: 4 });
+            };
+
+            return (
+                <div class="fade-in max-w-2xl mx-auto">
+                    <div class="bg-surface-dark border border-white/5 p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-8">Guest Information</h2>
+
+                        {formError && (
+                            <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-xl mb-6 flex items-start gap-3">
+                                <span class="material-symbols-outlined flex-shrink-0">error</span>
+                                <span>{formError}</span>
+                            </div>
+                        )}
+
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={guestDetails.firstName}
+                                    onChange={(e) => handleChange('firstName', e.target.value)}
+                                    class="bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={guestDetails.lastName}
+                                    onChange={(e) => handleChange('lastName', e.target.value)}
+                                    class="bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                                />
+                            </div>
+
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                value={guestDetails.email}
+                                onChange={(e) => handleChange('email', e.target.value)}
+                                class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                            />
+
+                            <input
+                                type="tel"
+                                placeholder="Phone Number"
+                                value={guestDetails.phone}
+                                onChange={(e) => handleChange('phone', e.target.value)}
+                                class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                            />
+
+                            <textarea
+                                placeholder="Special Requests (optional)"
+                                value={guestDetails.specialRequests}
+                                onChange={(e) => handleChange('specialRequests', e.target.value)}
+                                rows="4"
+                                class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors resize-none"
+                            ></textarea>
+                        </div>
+
+                        <div class="flex gap-4 mt-8">
+                            <button
+                                onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 2 })}
+                                class="flex-1 h-12 rounded-full border border-white/20 text-white font-bold hover:bg-white/5 transition-colors"
+                            >
+                                Back
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                class="flex-1 h-12 rounded-full bg-primary hover:bg-primary/90 text-background-dark font-bold transition-all shadow-lg shadow-primary/20"
+                            >
+                                Continue to Payment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Step 4: Payment
+        const PaymentStep = () => {
+            const { state, dispatch } = useBooking();
+            const { paymentDetails, stayDetails, selectedRoom, guestDetails, isLoading } = state;
+            const [formError, setFormError] = useState('');
+
+            const nights = Math.ceil((new Date(stayDetails.checkOut) - new Date(stayDetails.checkIn)) / (1000 * 60 * 60 * 24));
+            const subtotal = selectedRoom.price * nights;
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+
+            const handleChange = (field, value) => {
+                let formattedValue = value;
+                
+                if (field === 'cardNumber') {
+                    formattedValue = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+                }
+                if (field === 'expiry') {
+                    formattedValue = value.replace(/\D/g, '');
+                    if (formattedValue.length >= 2) {
+                        formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4);
+                    }
+                }
+                
+                dispatch({ type: 'SET_PAYMENT', payload: { [field]: formattedValue } });
+                setFormError('');
+            };
+
+            const validatePayment = () => {
+                if (!paymentDetails.cardNumber.replace(/\s/g, '').match(/^\d{16}$/)) {
+                    return 'Valid card number required (16 digits)';
+                }
+                if (!paymentDetails.expiry.match(/^\d{2}\/\d{2}$/)) {
+                    return 'Valid expiry date required (MM/YY)';
+                }
+                if (!paymentDetails.cvc.match(/^\d{3,4}$/)) {
+                    return 'Valid CVC required (3-4 digits)';
+                }
+                return null;
+            };
+
+            const handlePayment = async () => {
+                const error = validatePayment();
+                if (error) {
+                    setFormError(error);
+                    return;
+                }
+
+                dispatch({ type: 'SET_LOADING', payload: true });
+
+                // Simulate payment processing
+                setTimeout(() => {
+                    dispatch({ type: 'SET_LOADING', payload: false });
+                    const confirmation = {
+                        confirmationNumber: 'LUX-' + Date.now().toString().slice(-8),
+                        bookingId: Math.random().toString(36).substr(2, 9).toUpperCase(),
+                        guestName: guestDetails.firstName + ' ' + guestDetails.lastName,
+                        email: guestDetails.email,
+                        roomName: selectedRoom.name,
+                        checkIn: stayDetails.checkIn,
+                        checkOut: stayDetails.checkOut,
+                        nights: nights,
+                        total: total,
+                        date: new Date().toLocaleString()
+                    };
+                    dispatch({ type: 'SET_CONFIRMATION', payload: confirmation });
+                    dispatch({ type: 'SET_CURRENT_STEP', payload: 5 });
+                }, 2000);
+            };
+
+            return (
+                <div class="fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Payment Form */}
+                        <div class="lg:col-span-2">
+                            <div class="bg-surface-dark border border-white/5 p-8 rounded-2xl">
+                                <h2 class="text-3xl font-bold text-white mb-8">Secure Payment</h2>
+
+                                {formError && (
+                                    <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-xl mb-6 flex items-start gap-3">
+                                        <span class="material-symbols-outlined flex-shrink-0">error</span>
+                                        <span>{formError}</span>
+                                    </div>
+                                )}
+
+                                {/* Security Info */}
+                                <div class="bg-white/5 border border-primary/30 rounded-lg p-4 mb-8 flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-primary flex-shrink-0">lock</span>
+                                    <p class="text-gray-300 text-sm">Your payment is encrypted and secure. LuxeStay never stores card details.</p>
+                                </div>
+
+                                <div class="space-y-6">
+                                    <div>
+                                        <label class="block text-white text-sm font-bold mb-3">Card Number</label>
+                                        <input
+                                            type="text"
+                                            placeholder="1234 5678 9012 3456"
+                                            value={paymentDetails.cardNumber}
+                                            onChange={(e) => handleChange('cardNumber', e.target.value)}
+                                            maxLength="19"
+                                            class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors font-mono"
+                                        />
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-white text-sm font-bold mb-3">Expiry Date</label>
+                                            <input
+                                                type="text"
+                                                placeholder="MM/YY"
+                                                value={paymentDetails.expiry}
+                                                onChange={(e) => handleChange('expiry', e.target.value)}
+                                                maxLength="5"
+                                                class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-sm font-bold mb-3">CVC</label>
+                                            <input
+                                                type="text"
+                                                placeholder="123"
+                                                value={paymentDetails.cvc}
+                                                onChange={(e) => handleChange('cvc', e.target.value)}
+                                                maxLength="4"
+                                                class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors font-mono"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 mt-8">
+                                    <button
+                                        onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 3 })}
+                                        disabled={isLoading}
+                                        class="flex-1 h-12 rounded-full border border-white/20 text-white font-bold hover:bg-white/5 transition-colors disabled:opacity-50"
+                                    >
+                                        Back
+                                    </button>
+                                    <button
+                                        onClick={handlePayment}
+                                        disabled={isLoading}
+                                        class="flex-1 h-12 rounded-full bg-primary hover:bg-primary/90 text-background-dark font-bold transition-all shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                                    >
+                                        {isLoading ? (
+                                            <>
+                                                <span class="inline-block w-4 h-4 border-2 border-background-dark border-t-transparent rounded-full animate-spin"></span>
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            `Pay $${total.toFixed(2)}`
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Order Summary */}
+                        <div class="bg-surface-dark border border-white/5 p-6 rounded-2xl h-fit sticky top-24">
+                            <h3 class="text-xl font-bold text-white mb-6">Order Summary</h3>
+
+                            <div class="space-y-4 mb-6 pb-6 border-b border-white/10">
+                                <div>
+                                    <p class="text-gray-400 text-sm mb-1">{selectedRoom.name}</p>
+                                    <p class="text-white font-bold">{nights} Night{nights > 1 ? 's' : ''}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm mb-1">Guest</p>
+                                    <p class="text-white font-bold">{guestDetails.firstName} {guestDetails.lastName}</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 mb-6 pb-6 border-b border-white/10">
+                                <div class="flex justify-between text-gray-300 text-sm">
+                                    <span>Room × {nights}</span>
+                                    <span>${subtotal.toFixed(2)}</span>
+                                </div>
+                                <div class="flex justify-between text-gray-300 text-sm">
+                                    <span>Tax (10%)</span>
+                                    <span>${tax.toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-end">
+                                <span class="text-white font-bold">Total</span>
+                                <span class="text-primary text-2xl font-bold">${total.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Step 5: Confirmation
+        const ConfirmationStep = () => {
+            const { state } = useBooking();
+            const { confirmation } = state;
+
+            return (
+                <div class="fade-in max-w-2xl mx-auto">
+                    <div class="bg-surface-dark border border-white/5 p-12 rounded-2xl text-center">
+                        {/* Success Icon */}
+                        <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-8 pulse-green">
+                            <span class="material-symbols-outlined text-5xl text-primary">check_circle</span>
+                        </div>
+
+                        <h1 class="text-4xl font-black text-white mb-3">Booking Confirmed!</h1>
+                        <p class="text-gray-400 text-lg mb-10">Thank you for choosing LuxeStay. Your reservation is confirmed.</p>
+
+                        {/* Confirmation Details */}
+                        <div class="bg-background-dark rounded-xl p-8 mb-10 space-y-6 text-left">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Confirmation #</p>
+                                    <p class="text-white text-lg font-bold font-mono">{confirmation.confirmationNumber}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Booking ID</p>
+                                    <p class="text-white text-lg font-bold font-mono">{confirmation.bookingId}</p>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-white/5 pt-6">
+                                <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Guest</p>
+                                <p class="text-white text-lg font-bold">{confirmation.guestName}</p>
+                            </div>
+
+                            <div class="border-t border-white/5 pt-6">
+                                <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Room</p>
+                                <p class="text-white text-lg font-bold">{confirmation.roomName}</p>
+                            </div>
+
+                            <div class="border-t border-white/5 pt-6 grid grid-cols-3 gap-4">
+                                <div>
+                                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Check-in</p>
+                                    <p class="text-white font-bold">{new Date(confirmation.checkIn).toLocaleDateString()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Check-out</p>
+                                    <p class="text-white font-bold">{new Date(confirmation.checkOut).toLocaleDateString()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Duration</p>
+                                    <p class="text-white font-bold">{confirmation.nights} night{confirmation.nights > 1 ? 's' : ''}</p>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-white/5 pt-6 flex justify-between items-end">
+                                <span class="text-gray-400">Total Amount</span>
+                                <span class="text-primary text-3xl font-bold">${confirmation.total.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        {/* Next Steps */}
+                        <div class="bg-white/5 border border-primary/30 rounded-lg p-6 mb-10 text-left">
+                            <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">info</span>
+                                What's Next?
+                            </h3>
+                            <ul class="space-y-3 text-gray-300 text-sm">
+                                <li class="flex gap-3">
+                                    <span class="text-primary font-bold">1.</span>
+                                    <span>A confirmation email has been sent to <strong>{confirmation.email}</strong></span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-primary font-bold">2.</span>
+                                    <span>You can check in 24 hours before arrival via our mobile app</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-primary font-bold">3.</span>
+                                    <span>Our concierge team will contact you 48 hours before arrival</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <span class="text-primary font-bold">4.</span>
+                                    <span>Enjoy your stay and don't hesitate to contact us for any needs</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={() => window.location.href = '/'}
+                                class="flex-1 h-12 rounded-full border border-white/20 text-white font-bold hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <span class="material-symbols-outlined">arrow_back</span>
+                                Back to Home
+                            </button>
+                            <button
+                                onClick={() => {
+                                    // Simulating email sending
+                                    alert('Confirmation sent to ' + confirmation.email);
+                                }}
+                                class="flex-1 h-12 rounded-full bg-primary hover:bg-primary/90 text-background-dark font-bold transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                            >
+                                <span class="material-symbols-outlined">mail</span>
+                                Resend Confirmation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Booking Component
+        const BookingFlow = () => {
+            const { state } = useBooking();
+            const { currentStep } = state;
+
+            const steps = [
+                { component: StayDetailsStep, title: 'Stay Details' },
+                { component: RoomSelectionStep, title: 'Room Selection' },
+                { component: GuestDetailsStep, title: 'Guest Details' },
+                { component: PaymentStep, title: 'Payment' },
+                { component: ConfirmationStep, title: 'Confirmation' },
+            ];
+
+            const CurrentStep = steps[currentStep - 1].component;
+
+            return (
+                <>
+                    <BookingHeader />
+                    <div class="pt-28 pb-12 px-4">
+                        <div class="max-w-[1280px] mx-auto">
+                            <StepIndicator currentStep={currentStep} totalSteps={5} />
+                            <CurrentStep />
+                        </div>
+                    </div>
+                </>
+            );
+        };
+
+        // Root App
+        const App = () => {
+            return (
+                <BookingProvider>
+                    <BookingFlow />
+                </BookingProvider>
+            );
+        };
+
+        // Render
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

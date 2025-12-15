@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LuxeStay Management</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5be830",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#152111",
+                        "surface-dark": "#1e261c",
+                        "surface-dark-lighter": "#2a3627",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #152111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3627;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5be830;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased overflow-x-hidden">
+<!-- Sticky Navigation -->
+<div class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background-dark/80 border-b border-white/5 transition-all duration-300">
+<div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3 text-white">
+<div class="text-primary">
+<span class="material-symbols-outlined text-4xl">diamond</span>
+</div>
+<h2 class="text-white text-xl font-bold tracking-tight">LuxeStay</h2>
+</div>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Home</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Rooms</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Amenities</a>
+<a class="text-gray-300 hover:text-primary transition-colors text-sm font-medium" href="#">Contact</a>
+</div>
+<div class="flex gap-3">
+<button class="hidden sm:flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-bold h-10 px-6 transition-all">
+                    Login
+                </button>
+<a href="booking.html" class="flex items-center justify-center rounded-full bg-primary hover:bg-primary/90 text-background-dark text-sm font-bold h-10 px-6 shadow-[0_0_20px_rgba(91,232,48,0.3)] transition-all transform hover:scale-105">
+                    Book Your Stay
+                </a>
+</div>
+</div>
+</div>
+<!-- Main Content Wrapper -->
+<div class="pt-20">
+<!-- Hero Section -->
+<div class="relative min-h-[90vh] w-full flex items-center justify-center p-4">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0 rounded-b-[3rem] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-background-dark/60 via-background-dark/40 to-background-dark z-10"></div>
+<div class="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-1000 hover:scale-105" data-alt="Luxurious hotel lobby with warm lighting and modern architecture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBcb2l1BF9Vs5PF_1_9dYvNEnL-NAlOtFrOCL0oa5Kxdb05-lWAQYeiWG4WTHC7EFvqRshug0cpHxxZwgJEL8cFNPBXoiexjioUy19GJzP_SL0-Ui3D5vDmf6W22W3nz4L-KstLmMD0l5H-xUV6BWdZW_EOeBilHXf3drgNOVGZG6fVK86C3WNsjb-Pw_DrdU4tiMTFHaWIcje8rh9a_vY6ugu3-SUCX1WtOY_09NUX9VnBk9B-EYdotdLeSrWKYg23xinfALIWnHmK');">
+</div>
+</div>
+<div class="relative z-20 flex flex-col items-center text-center max-w-4xl px-4 animate-fade-in-up">
+<span class="inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+                    Premium Hospitality Management
+                </span>
+<h1 class="text-white text-5xl md:text-7xl font-black leading-tight tracking-tight mb-6">
+                    Experience Comfort, <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-200">Managed to Perfection.</span>
+</h1>
+<p class="text-gray-300 text-lg md:text-xl font-medium leading-relaxed max-w-2xl mb-10">
+                    Smart hotel management with seamless booking, elegant stays, and effortless operations. Discover the future of hospitality.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+<a href="booking.html" class="flex items-center justify-center rounded-full bg-primary hover:bg-primary/90 text-background-dark text-base font-bold h-14 px-8 min-w-[200px] transition-all shadow-lg shadow-primary/20">
+                        Book Your Stay
+                    </a>
+<button class="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-base font-bold h-14 px-8 min-w-[200px] transition-all group">
+<span>Explore Rooms</span>
+<span class="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Trust Signals Bar -->
+<div class="w-full px-4 -mt-10 relative z-30 mb-20">
+<div class="max-w-[1280px] mx-auto bg-surface-dark border border-white/5 rounded-2xl p-8 shadow-2xl backdrop-blur-xl">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+<!-- Trust Item 1 -->
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<h3 class="text-white font-bold text-sm">24/7 Service</h3>
+<p class="text-gray-400 text-xs">Always here for you</p>
+</div>
+</div>
+<!-- Trust Item 2 -->
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div>
+<h3 class="text-white font-bold text-sm">Secure Booking</h3>
+<p class="text-gray-400 text-xs">Encrypted payments</p>
+</div>
+</div>
+<!-- Trust Item 3 -->
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div>
+<h3 class="text-white font-bold text-sm">10,000+ Guests</h3>
+<p class="text-gray-400 text-xs">Happy travelers</p>
+</div>
+</div>
+<!-- Trust Item 4 -->
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<h3 class="text-white font-bold text-sm">Certified</h3>
+<p class="text-gray-400 text-xs">ISO Standards</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- About Section -->
+<div class="w-full px-4 py-20 bg-background-dark">
+<div class="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/20 rounded-[2.5rem] blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+<div class="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10">
+<div class="w-full h-full bg-cover bg-center transform group-hover:scale-110 transition-transform duration-700" data-alt="Modern hotel exterior with glass facade at dusk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRNl8O44DaPFNXV1EH8Fua0ut9kRlJBWVMrB0DXoDQV10rhitLN0krrTsOQQ2N_W3amFyLE-A8QeiagDaJGl4SbsnnQmm2DjuVdnkKSW5WbiO4EFkLoR1fKLBCN_xVSvjPrKGOcJm4SVmBKblJmQfDhWKH0JPXHXt06QZzNOnQ_kYuYLMZwCqGXOC1ficbGdzdSdtmF75bQ-NSiPF8bF3qLVrPMoaJOMBEYD_QXBudo8urm0C7yLPb8wsyhL0X6YLr_SoFKfVtcPnf');">
+</div>
+</div>
+<!-- Floater Card -->
+<div class="absolute bottom-8 -right-4 sm:-right-8 bg-surface-dark-lighter border border-white/10 p-4 rounded-xl shadow-xl max-w-[240px]">
+<div class="flex items-center gap-3 mb-2">
+<div class="flex -space-x-2">
+<img alt="Guest" class="size-8 rounded-full border-2 border-surface-dark" data-alt="Guest avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkQCD9UslfB6WprAOvfeTucQc05QCQKGruFrIfUFtkIXsiBy_DC-PLQfroPltLYx4Kh8T_UcBXouoJEhL1fWCV6PV7rw7Q6Fi56yIKZB8ZessZakpVHNgq-ulAoPKel312wWV0udfcNHv1EER7aFvtCOaMNomHB7AkWSokIJ7VgIgFnc5VxfKAaRseRyV_9fX0Itl7ppknbkAdvSVd1Da31CVx8kAz83t9DPu4T23aFnm-41YCUKfgwfB7TcnbyGOCZv8fQ7L9gNj6"/>
+<img alt="Guest" class="size-8 rounded-full border-2 border-surface-dark" data-alt="Guest avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2b1EV37Wk1yi5d5XLs9cETfKbX5DTjHMiIb5pRWj_OtaD2hSQCc9JBjbRp2oZrumDswe1PUCKRqxsMUG9p4qA7ifb3QpfVnBuIf5ixOZCfvH8eEMTUT6i8Pt79956nCrweNK9asaRunivyjKLy2kGRG9Ois_bR4FW3c4nMBxlQZRZPV2TwPWaSKb5iDLcPtSMzj75yKMQF1PxEivjuyb8xsc1jGSfHI3EfCqyy2Cu76VCDko5JGVrSuiDWYr0DJIy-Gi9I1TCs-f-"/>
+<img alt="Guest" class="size-8 rounded-full border-2 border-surface-dark" data-alt="Guest avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1T9L-nBQbpornE_6D2q2Y2eE2SUn-pJ_lTbN0QHYUrJAE9T25rJ1EH8M1GzE0FcA0Zev9J3ewnEUZWq6YxUCBamjJe0hh_-HDAyGoXMnXf9zdU6fr4YFnh7VQNQo7Q9UF-58iM2cFHtXR2MmNki_oDM4d8pQBWWfm-OzpGBnfZFTndzz8l7JIOhm3cPcyAjnvAK_kJ9jcvvIrNFwcVsRi1DVHieVaYWp2Q7IiXIj-l1zes2ctbyUV1StuoG_naMRf9W6tfhl2T4-E"/>
+</div>
+<span class="text-white text-xs font-bold">4.9/5 Rating</span>
+</div>
+<p class="text-gray-400 text-xs">"The most seamless check-in experience I've ever had."</p>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h2 class="text-primary font-bold text-sm uppercase tracking-wider">About Our Hotel</h2>
+<h3 class="text-white text-4xl md:text-5xl font-black leading-tight tracking-tight">
+                        Modern Luxury Meets <br/> Timeless Hospitality.
+                    </h3>
+<p class="text-gray-400 text-lg leading-relaxed">
+                        We blend luxury aesthetics with practical hotel operations to deliver a calm, premium, and reliable experience. Our philosophy is simple: anticipate needs before they arise. From our smart booking systems to our dedicated concierge, every detail is curated for your comfort.
+                    </p>
+<div class="flex gap-4 pt-4">
+<div class="flex flex-col gap-2">
+<h4 class="text-white text-2xl font-bold">150+</h4>
+<p class="text-gray-500 text-sm">Luxury Rooms</p>
+</div>
+<div class="w-px bg-white/10 h-12 self-center mx-4"></div>
+<div class="flex flex-col gap-2">
+<h4 class="text-white text-2xl font-bold">12</h4>
+<p class="text-gray-500 text-sm">Awards Won</p>
+</div>
+<div class="w-px bg-white/10 h-12 self-center mx-4"></div>
+<div class="flex flex-col gap-2">
+<h4 class="text-white text-2xl font-bold">100%</h4>
+<p class="text-gray-500 text-sm">Satisfaction</p>
+</div>
+</div>
+<div class="pt-6">
+<button class="text-primary hover:text-white font-bold inline-flex items-center gap-2 transition-colors">
+                            Read Our Story <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Rooms & Suites Section -->
+<div class="w-full px-4 py-20 bg-surface-dark">
+<div class="max-w-[1280px] mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 class="text-white text-3xl md:text-4xl font-bold mb-3">Rooms &amp; Suites</h2>
+<p class="text-gray-400">Sanctuaries of peace and privacy, designed for the modern traveler.</p>
+</div>
+<button class="px-6 py-2 rounded-full border border-white/20 text-white hover:bg-white/10 text-sm font-bold transition-colors">
+                        View All Rooms
+                    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Room Card 1 -->
+<div class="group bg-background-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="relative h-64 overflow-hidden">
+<div class="absolute top-4 left-4 z-10 bg-surface-dark/80 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full border border-white/10">
+                                Best Seller
+                            </div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Modern bedroom interior with king size bed and large window" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOIyDBA25hOq5u9ljjTFcnHPSUUgiT9R8cvTUF6y7kvcOcvak5ENIn7VfaLWSklSVCVj4OvMEcvDwvcv6Qo1oa35gu88uJALMiHwrzKj2ZITyQFjAXdtKsm6V6aVEiemA7hgziCFikL3vMpJv_VcfaiPkkg_oLKJmPHse0IqmABvS1kBHRASinPWPdUAIFq9VOA76nSNDDpV3_MJ2OhJ-epFzk9Gx4GSQyJFHopDnIhB4uTDMaMw1OidPt-qCvaMGh8F0bH5k-4UPA');">
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-white text-xl font-bold">Deluxe Ocean View</h3>
+<p class="text-gray-500 text-sm mt-1">2 Guests • 45m²</p>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">
+                                    $350/n
+                                </div>
+</div>
+<div class="flex gap-4 mb-6 border-t border-white/5 pt-4">
+<div class="flex items-center gap-1 text-gray-400" title="Wifi">
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="TV">
+<span class="material-symbols-outlined text-[18px]">tv</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="Bathtub">
+<span class="material-symbols-outlined text-[18px]">bathtub</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="AC">
+<span class="material-symbols-outlined text-[18px]">ac_unit</span>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-white/5 hover:bg-primary hover:text-background-dark text-white font-bold transition-colors">
+                                View Details
+                            </button>
+</div>
+</div>
+<!-- Room Card 2 -->
+<div class="group bg-background-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="relative h-64 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Luxury suite living area with minimal furniture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOSRw6tVpTWxQ6oMusx12X62vjZvogXqaxBQQA4X5NrYfUZBz6qx--3bfZmyR1cPrzSDNGd8yUAXgo6KhhcTr_UwYJHUCrfHOmae60ooAIcaIvTPmRfXxqOV-6wNuSa9--yJI4-iChssF9nhTb2rkZH-VFd7kOt7y_HAeffKXCAlQd4K7Ld2eiwo7-TZuqC5ULemfse3RGzufdWfgDUYlVCmuGB4-qC1_f-cdavgtQActlMLfC9EFnszxw2IMT5sTEoJnOEvoKPPYk');">
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-white text-xl font-bold">Executive Suite</h3>
+<p class="text-gray-500 text-sm mt-1">4 Guests • 85m²</p>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">
+                                    $550/n
+                                </div>
+</div>
+<div class="flex gap-4 mb-6 border-t border-white/5 pt-4">
+<div class="flex items-center gap-1 text-gray-400" title="Wifi">
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="Workplace">
+<span class="material-symbols-outlined text-[18px]">desk</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="Minibar">
+<span class="material-symbols-outlined text-[18px]">kitchen</span>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-white/5 hover:bg-primary hover:text-background-dark text-white font-bold transition-colors">
+                                View Details
+                            </button>
+</div>
+</div>
+<!-- Room Card 3 -->
+<div class="group bg-background-dark rounded-2xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="relative h-64 overflow-hidden">
+<div class="absolute top-4 left-4 z-10 bg-primary text-background-dark text-xs font-bold px-3 py-1 rounded-full">
+                                Only 1 Left
+                            </div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Modern twin room with bright interior" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBt1AAPGpb8FxHTokJ8f_Wyv_LF2KO5jlS4GUb1H2W7Vlx0t0Ep_fWZ0L0Om52tP-YNfIIR9d-iqkurNoI8owowqk-glIX4JKWSAir-9C56Oc7wJykjSoQVDJ43KZZ94v6Hcp178x_1dNvzRarn-qcFP6eClQ2tnwvoUgH7oQCIyGMqgnWaOx4OWaiG9jQC40U-pmrScVQfjgaCAl9t4kq6P3Fkg1jhoMvJ_m1p1hB0101YwlLl9N7-Ki2uNmvTthrVhs4krxBieBC-');">
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-white text-xl font-bold">Premier Twin</h3>
+<p class="text-gray-500 text-sm mt-1">2 Guests • 40m²</p>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">
+                                    $280/n
+                                </div>
+</div>
+<div class="flex gap-4 mb-6 border-t border-white/5 pt-4">
+<div class="flex items-center gap-1 text-gray-400" title="Wifi">
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+</div>
+<div class="flex items-center gap-1 text-gray-400" title="Safe">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-white/5 hover:bg-primary hover:text-background-dark text-white font-bold transition-colors">
+                                View Details
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Management Features -->
+<div class="w-full px-4 py-20 bg-background-dark">
+<div class="max-w-[1280px] mx-auto">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<h2 class="text-primary font-bold text-sm uppercase tracking-wider mb-2">Operational Excellence</h2>
+<h3 class="text-white text-3xl md:text-4xl font-bold mb-4">Smart Hotel Management</h3>
+<p class="text-gray-400">Our backbone is technology. We use state-of-the-art systems to ensure your stay is glitch-free and our service is prompt.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Feature 1 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">calendar_month</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Smart Booking System</h4>
+<p class="text-gray-400 text-sm leading-relaxed">Real-time availability and instant confirmation with zero double-booking errors.</p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Room Dashboard</h4>
+<p class="text-gray-400 text-sm leading-relaxed">Live view of room status, housekeeping needs, and maintenance alerts.</p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">key</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Automated Check-in</h4>
+<p class="text-gray-400 text-sm leading-relaxed">Skip the queue with our mobile key and digital ID verification process.</p>
+</div>
+<!-- Feature 4 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">cleaning_services</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Staff &amp; Housekeeping</h4>
+<p class="text-gray-400 text-sm leading-relaxed">Automated dispatching of cleaning crews the moment you check out.</p>
+</div>
+<!-- Feature 5 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">receipt_long</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Billing &amp; Invoicing</h4>
+<p class="text-gray-400 text-sm leading-relaxed">Transparent, itemized digital invoices sent instantly to your email.</p>
+</div>
+<!-- Feature 6 -->
+<div class="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:bg-surface-dark-lighter transition-colors group">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">manage_accounts</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Guest Preferences</h4>
+<p class="text-gray-400 text-sm leading-relaxed">We remember your pillow choice and room temperature for your next stay.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Amenities Grid -->
+<div class="w-full px-4 py-20 bg-surface-dark">
+<div class="max-w-[1280px] mx-auto">
+<h2 class="text-white text-3xl font-bold mb-10">Premium Amenities</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[500px]">
+<div class="col-span-2 row-span-2 relative group rounded-2xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10"></div>
+<div class="absolute bottom-6 left-6 z-20">
+<h3 class="text-white text-2xl font-bold">Spa &amp; Wellness</h3>
+<p class="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Rejuvenate your senses</p>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Luxury spa treatment room" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjQE9AbksvfIlrt6C24r4Ax1uiSi6hrykp_kjaN2xZjBs0AKaox9oB2OoCgbHzdHw7amMW5YMo8FYkZlsWyACvCuejF2CKmcHjE1EKRU3dK3I88yZZrK0LXUOFilMp7m2PvWJyht17vI1A9R3lkJYMeS29SJGIZMRlLCew6Njb6ZxI1QuhWyJR71H70SPXoeYtU_TEK9HvgAE0o24DFBvXZ5oIlVfwS9FbIhFgfSb1RGIfn5nQrmH9bJpQtUidY6d127D935CdWb0x');">
+</div>
+</div>
+<div class="relative group rounded-2xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10"></div>
+<div class="absolute bottom-4 left-4 z-20">
+<h3 class="text-white text-lg font-bold">Fine Dining</h3>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Gourmet restaurant interior" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNR6B6S24y7ZNicOiDR8IOHcFTHyQQRPs6-FM3GJXzAtEQyoCpOlKD64hNLogCNVXkUgXkHu3iekB99NeWixxsjeMT61aSUdUqjDJBkS1-No1RXZaj18zOKRNMDTHz3ypCjNxB0pQcY6iuvB0nNemJxTvCOLajdQcknB4AqVCy2nEsGsubsNyg56T-Tks9-P1sgL_VGh425dEYLJArVSR0E71AC-QcFz_OmVWFcap5ypcmvI8kha6jBalcKp64mSlx99hjMJKxRqqt');">
+</div>
+</div>
+<div class="relative group rounded-2xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10"></div>
+<div class="absolute bottom-4 left-4 z-20">
+<h3 class="text-white text-lg font-bold">Infinity Pool</h3>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Infinity pool overlooking the ocean" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBieyZ7u5IXDQZAOqDGCmhhL55Vgoi6iVUo2XhiTLDtbSpH8hl3wP9iowal5KW5fIZw0zYX6swGwRp-Pm661Uo7Ig1RQUYR-u23-Bu_uPB6nIlc7o1m5s_lsFa6atDG19RSr7Pudph3KEphMJm4GV30_iVHy_9kDz0qh5jpr3QP0URXg3DaB6EtwTMSdC6b15MKFvbx5VqCc38lV0dRywEzov36P689H75I2xJHLeAw7DqC3-vB3nlWDSDu0h9zVzqxF98RujvMb2m6');">
+</div>
+</div>
+<div class="col-span-2 relative group rounded-2xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10"></div>
+<div class="absolute bottom-6 left-6 z-20">
+<h3 class="text-white text-xl font-bold">Conference Hall</h3>
+<p class="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity">Business meets luxury</p>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Large conference hall setup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLt36_7PYclf0QhD0lNzyQsUsvDR7TCAeRky-H9HXwrBaC3-r-bY7rXrN4584jJUGAbZPvEG2WYQw_mwRE5BRZ6BarDKNnVrj9nOdADV05sAiQldUvzK81Kpv8llBUbsqtaYmDZFqec7zxewzHOn84muofG5Qv8Oz7rwq5ytGK3nvW0_oNUhgPtSQDw0WhNG_BpgE8-4xgbYBdJLo-kjzmlvSMcsP-G4xbRbLZEYpGshCKZrcfzU9NxAxVcKIBQjNxG2iiOYptHK58');">
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Guest Workflow -->
+<div class="w-full px-4 py-20 bg-background-dark overflow-hidden">
+<div class="max-w-[1280px] mx-auto">
+<h2 class="text-white text-3xl font-bold text-center mb-16">Seamless Guest Experience</h2>
+<div class="relative">
+<!-- Connecting Line -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-y-1/2 border-t border-dashed border-gray-600"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center group">
+<div class="size-16 rounded-full bg-surface-dark border-2 border-primary text-primary flex items-center justify-center mb-6 shadow-[0_0_15px_rgba(91,232,48,0.2)] group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">search</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Search &amp; Book</h4>
+<p class="text-gray-400 text-sm">Find your perfect suite instantly.</p>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center group">
+<div class="size-16 rounded-full bg-surface-dark border border-white/20 text-white group-hover:border-primary group-hover:text-primary flex items-center justify-center mb-6 transition-colors">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Secure Confirm</h4>
+<p class="text-gray-400 text-sm">Encrypted payment &amp; instant ID.</p>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center group">
+<div class="size-16 rounded-full bg-surface-dark border border-white/20 text-white group-hover:border-primary group-hover:text-primary flex items-center justify-center mb-6 transition-colors">
+<span class="material-symbols-outlined text-3xl">sensor_door</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Smart Check-in</h4>
+<p class="text-gray-400 text-sm">Keyless entry via app.</p>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center group">
+<div class="size-16 rounded-full bg-surface-dark border border-white/20 text-white group-hover:border-primary group-hover:text-primary flex items-center justify-center mb-6 transition-colors">
+<span class="material-symbols-outlined text-3xl">rate_review</span>
+</div>
+<h4 class="text-white text-lg font-bold mb-2">Feedback</h4>
+<p class="text-gray-400 text-sm">Easy checkout &amp; rating.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Testimonials -->
+<div class="w-full px-4 py-20 bg-surface-dark">
+<div class="max-w-[1280px] mx-auto">
+<h2 class="text-white text-3xl font-bold mb-12">What Our Guests Say</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-background-dark p-8 rounded-2xl border border-white/5 relative">
+<span class="material-symbols-outlined text-primary text-4xl absolute top-6 right-6 opacity-50">format_quote</span>
+<p class="text-gray-300 text-sm italic mb-6 leading-relaxed">"The attention to detail is unmatched. From the automated check-in to the personalized room settings, everything felt magical."</p>
+<div class="flex items-center gap-3">
+<img alt="Guest" class="size-10 rounded-full" data-alt="Portrait of a female guest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8384sWUcg80jjY8iyIlp0l-mNYUiXCjcyjxwDhjhvHjfTECqiZ-7jjcaePCbSc9wvDFVqzlSJ7wUdLJWpadu1wqIZruWxeX7YkR6EqGOvGUE793N0eT_w6dzTnTv2OV6_X9fXaEd_urgM0NCOxyTXQRHXMUrvP56lkTVq9C7IXkrPpKVhaL2YOo_3FkVk8OeWrhbTITWxAr-K2Xs5TkOvt26gMvplBNKLMiWbHYqyE_ENnhKxyIZiK6GnWbh6zotzdhru4pwjENv9"/>
+<div>
+<h4 class="text-white text-sm font-bold">Sarah Jenkins</h4>
+<div class="flex text-primary text-[12px]">
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-background-dark p-8 rounded-2xl border border-white/5 relative">
+<span class="material-symbols-outlined text-primary text-4xl absolute top-6 right-6 opacity-50">format_quote</span>
+<p class="text-gray-300 text-sm italic mb-6 leading-relaxed">"A truly modern hotel experience. Fast wifi, great workspace, and the best espresso I've had in a hotel room."</p>
+<div class="flex items-center gap-3">
+<img alt="Guest" class="size-10 rounded-full" data-alt="Portrait of a male guest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRvaQIZIjy2leMFlnpvqOVMKGm-x75v_1q1ZVrmLkXHqxCC9po96NWIVGngHvTU-qQvNoHFqFRJmCbiClcGT7x-xPVrxygvgDuGWsGDYs5DpxH3yM-IaxZ1ErHleWxQErfBKjJvyMuQ5GUk5LpNran7brY-5Qa8zSqB23C7HsOdT11RyNM-TauDFx5BpJLWKSg-HYMpBCaKUlZzk2NNZqkvG3TFpGUEr1fh9CN5c3_ClH4VBpAnNU-UBn8rWMdqgmCBNEz8YnlbRh_"/>
+<div>
+<h4 class="text-white text-sm font-bold">Michael Chen</h4>
+<div class="flex text-primary text-[12px]">
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-background-dark p-8 rounded-2xl border border-white/5 relative">
+<span class="material-symbols-outlined text-primary text-4xl absolute top-6 right-6 opacity-50">format_quote</span>
+<p class="text-gray-300 text-sm italic mb-6 leading-relaxed">"I loved the spa and the infinity pool. The staff was incredibly discreet and helpful. Will definitely return."</p>
+<div class="flex items-center gap-3">
+<img alt="Guest" class="size-10 rounded-full" data-alt="Portrait of a female guest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW2dmDgFdN-3Hg06obmA-eNTvLAdeHJWQoQSo1t78snt3pRDDcsIJ6SmxA3hejn-7FX7MT90ozuvLrNWQOZyMzA5_odUWsVEmKgKOhof5ClFQTwkPIet6yXeyJFuhhLAZh8uFZeIFGa5DGGbOavezlmv84obSdh_3q2Gufe_XHC7mGV5Ty8xhE0PWBv6zmiek1CPR9FZX377xmrd8UZ10PWYPnOnLG8O_mEjkom2eOL3vG_mhyN8VKs6fucqa2tYwZ4h5-TmNj0eAq"/>
+<div>
+<h4 class="text-white text-sm font-bold">Elena Rodriguez</h4>
+<div class="flex text-primary text-[12px]">
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+<span class="material-symbols-outlined text-[16px] filled">star</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Location & Contact -->
+<div class="w-full bg-background-dark relative">
+<div class="w-full h-[400px] opacity-60 grayscale hover:grayscale-0 transition-all duration-500" data-alt="Minimalist map of the hotel location" data-location="New York, USA" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBs97h4UEi_5-IevPI0rbJXy4jkqLGBRbl9qrllio8jyZRPsvJIIjuRhhGSAYWwSSY_fgzJ-WQHlHnC3z2PLhNgjpEnVWhvBUQ17qaorxatu6n2E3baekweM1EEG51PBmN_CM9Z2lNg06jh5Mpl5jF6hzrq9hb6W53sSfXJCKT0-zO3w-zZVpD12O_YNiTbHaN_nEU13qKjWI8OrqF8DESIYg4Oh7uIMsEE5ZqWme835KbXLT4alNOM-PdvWQw8Re3t65effDxKjRBQ'); background-size: cover; background-position: center;">
+<div class="w-full h-full bg-background-dark/20 backdrop-blur-[1px]"></div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none p-4">
+<div class="bg-surface-dark border border-white/10 p-8 rounded-2xl shadow-2xl max-w-md w-full pointer-events-auto">
+<h3 class="text-white text-2xl font-bold mb-6">Visit Us</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<p class="text-gray-400 text-sm">123 Luxury Avenue, Upper East Side,<br/>New York, NY 10021</p>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">call</span>
+<p class="text-gray-400 text-sm">+1 (212) 555-0199</p>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">mail</span>
+<p class="text-gray-400 text-sm">concierge@luxestay.com</p>
+</div>
+</div>
+<button class="mt-8 w-full h-12 rounded-full bg-white text-background-dark font-bold hover:bg-gray-200 transition-colors">
+                        Get Directions
+                    </button>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-dark border-t border-white/5 pt-16 pb-8 px-4">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 text-white mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">diamond</span>
+<h2 class="text-xl font-bold">LuxeStay</h2>
+</div>
+<p class="text-gray-500 text-sm">Redefining modern hospitality with technology and elegance.</p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Quick Links</h4>
+<ul class="space-y-4 text-sm text-gray-400">
+<li><a class="hover:text-primary transition-colors" href="#">Home</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Rooms &amp; Suites</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Dining</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Spa</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Support</h4>
+<ul class="space-y-4 text-sm text-gray-400">
+<li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">FAQs</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Newsletter</h4>
+<p class="text-gray-500 text-sm mb-4">Subscribe for exclusive offers.</p>
+<div class="flex gap-2">
+<input class="bg-background-dark border border-white/10 rounded-full px-4 py-2 text-white text-sm w-full focus:outline-none focus:border-primary" placeholder="Email address" type="email"/>
+<button class="bg-primary text-background-dark rounded-full size-10 flex items-center justify-center hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5">
+<p class="text-gray-600 text-xs text-center md:text-left">© 2023 LuxeStay Management. All rights reserved.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="text-gray-500 hover:text-white transition-colors" href="#">
+<img alt="Instagram" class="w-5 h-5 invert opacity-50 hover:opacity-100" data-alt="Instagram logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQpHl3TLkn1qLJGOa5U7oZB_MY0EX-1mp-hfcE8OdBYCrp3vm-B_0e7H9Mk2EZ4i1dX0j0LzT6ADxcE8xDk3ThAUBTRWOhqMFaN-_8Ar31_8tiLfa3plEYmogBUCBWWvdaOVDn_zJuEqdLkwYMspmXYhiNLzqTtSJBoAHqsQ0LRtkazzf55k8Lnun-AR3mWRztktv1RT3oavVlx8QjKqt7a75fc7py4ZxLF7OJ86QRvCgiqXOGrFkY-nZyAZ1GW2NaYFsVodDhqJax"/>
+</a>
+<a class="text-gray-500 hover:text-white transition-colors" href="#">
+<img alt="Twitter" class="w-5 h-5 invert opacity-50 hover:opacity-100" data-alt="Twitter logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3KxKhLODj5WSY0FNGsNSY6tNwpY3LumVEsiPutqTRX0WXqMKJLo0bMde_0TNaN-LnHMJuSIujEMpgzzjU8JDUtnRpTK3qrrgw0rX2k2DwBr1zHWkvTotWlpS3YIcpzQhiwyrfIAr6ddeOcVdQvVYMG8KlhVHMqmkjYjw8uZ1iF7eu9sobMVbyRrLyJ0ACSqHOAf3k9IzNIpYh1v25MKsVuE26fDoLeAL9_gsrYbsXG3NcZK8AcQnpllMeuCsE4WrprUhWDo7zPu1S"/>
+</a>
+<a class="text-gray-500 hover:text-white transition-colors" href="#">
+<img alt="LinkedIn" class="w-5 h-5 invert opacity-50 hover:opacity-100" data-alt="LinkedIn logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFBMggnUDo55cj4NDIlHhMJ-dpGcjt7kdBpfMIIAirPtQp3otoJCZxGLd9r33YrXlz9X-BKRQBdxbXCfBINpQRmwC_7z4mQdvlC6uam5UTqbi9pA0OhsnEzlLgylUUJq_Hwi37fW99UlE4tmNyrP_uWas8-JPof4_LyLyycVmqqobIktz7ZLY8KpvLS-HyKPZpIh3bC5Ejy85z_FxABEcd4_zFbVpbA5qW_sxBwNOsCLVNrgDf7WySr-CVv6EYheXyOrDMq1Sxvr_0"/>
+</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- FAB -->
+<button class="fixed bottom-8 right-8 size-14 rounded-full bg-primary text-background-dark shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 transition-transform z-50 animate-bounce">
+<span class="material-symbols-outlined">chat</span>
+</button>
+</div>
+</body></html>
