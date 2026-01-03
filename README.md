@@ -1,4 +1,4 @@
-<img width="1898" height="1079" alt="image" src="https://github.com/user-attachments/assets/49b30f6e-2450-4b47-91dd-ae99bbdfc5e7" />
+<img width="1900" height="1076" alt="image" src="https://github.com/user-attachments/assets/caed3a35-b019-4bb1-8b59-fa2b91e8f9a3" />
 
 ---
 # 🏨 LuxeStay – Hotel Booking System
@@ -250,6 +250,7 @@ Total       ≈ 2150 lines
 * You document like a **professional engineer**
 
 This is **no longer a student-level project** when presented like this.
+
 
 
 
