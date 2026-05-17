@@ -563,10 +563,17 @@
                     margin:       [0.5, 0.5],
                     filename:     `Aurum_Grove_Reservation_${confirmation.id}.pdf`,
                     image:        { type: 'jpeg', quality: 1 },
-                    html2canvas:  { scale: 2, useCORS: true },
+                    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                html2pdf().set(opt).from(element).save();
+                
+                // Workaround for html2canvas blank page issue when scrolled
+                const originalScrollY = window.scrollY;
+                window.scrollTo(0, 0);
+                
+                html2pdf().set(opt).from(element).save().then(() => {
+                    window.scrollTo(0, originalScrollY);
+                });
             };
 
             return (
@@ -579,10 +586,11 @@
                         <p class="text-text-muted text-xl font-light">Thank you, {confirmation.name}. Your royal experience awaits.</p>
                     </div>
 
-                    <div ref={receiptRef} class="bg-surface-light border border-border-soft p-10 text-left mb-12 shadow-2xl relative overflow-hidden rounded-xl animate-slide-up stagger-1">
-                        <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-primary-light via-primary to-primary-dark"></div>
-                        
-                        <div class="flex justify-between items-start border-b border-border-soft pb-8 mb-8 mt-4">
+                    <div class="animate-slide-up stagger-1 mb-12">
+                        <div ref={receiptRef} class="bg-surface-light border border-border-soft p-10 text-left shadow-2xl relative overflow-hidden rounded-xl">
+                            <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-primary-light via-primary to-primary-dark"></div>
+                            
+                            <div class="flex justify-between items-start border-b border-border-soft pb-8 mb-8 mt-4">
                             <div>
                                 <div class="flex items-center gap-2 mb-2 text-primary">
                                     <span class="material-symbols-outlined text-2xl">local_florist</span>
@@ -636,9 +644,10 @@
                             <span class="font-serif italic text-4xl text-primary font-bold">${confirmation.total.toFixed(2)}</span>
                         </div>
 
-                        <div class="mt-8 pt-6 border-t border-dashed border-border-soft text-center text-xs text-text-muted font-light leading-relaxed">
-                            A confirmation email has been sent to {confirmation.email}.<br/>
-                            For any special requests, contact our concierge at reservations@aurumgrove.com.
+                            <div class="mt-8 pt-6 border-t border-dashed border-border-soft text-center text-xs text-text-muted font-light leading-relaxed">
+                                A confirmation email has been sent to {confirmation.email}.<br/>
+                                For any special requests, contact our concierge at reservations@aurumgrove.com.
+                            </div>
                         </div>
                     </div>
 
