@@ -38,8 +38,37 @@
         ::-webkit-scrollbar-track { background: #FAFAFA; }
         ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #B5952F; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Smooth Entrance Animations */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* Floating Label Logic */
+        .float-input:focus ~ .float-label,
+        .float-input:not(:placeholder-shown) ~ .float-label {
+            transform: translateY(-0.8rem) scale(0.75);
+            color: #D4AF37;
+        }
+
+        /* Checkbox Customization */
+        .gold-checkbox:checked { background-color: #D4AF37; border-color: #D4AF37; }
+        .gold-checkbox:focus { ring-color: #D4AF37; }
+        
+        /* Receipt edge */
+        .receipt-edge {
+            background-image: radial-gradient(circle at 10px 0, transparent 10px, #FFFFFF 11px);
+            background-size: 24px 100%;
+            background-repeat: repeat-x;
+            height: 12px;
+            width: 100%;
+        }
     </style>
 </head>
 <body class="bg-background-light text-text-dark font-sans antialiased overflow-x-hidden selection:bg-primary-light selection:text-white">
@@ -91,20 +120,22 @@
         ];
 
         const addonsDatabase = [
-            { id: 'breakfast', name: 'Royal Breakfast Buffet', price: 45, icon: 'restaurant', type: 'per_person_per_night', desc: 'Daily access to our lavish morning buffet overlooking the lake.' },
-            { id: 'spa', name: 'Couples Ayurvedic Spa', price: 200, icon: 'spa', type: 'once', desc: 'A 90-minute signature couples massage session.' },
-            { id: 'pickup', name: 'Airport Chauffeur', price: 80, icon: 'airport_shuttle', type: 'once', desc: 'Private luxury sedan transfer from Udaipur Airport.' },
-            { id: 'early', name: 'Early Check-in', price: 50, icon: 'schedule', type: 'once', desc: 'Guaranteed room access from 10:00 AM.' }
+            { id: 'breakfast', name: 'Royal Breakfast Buffet', price: 45, icon: 'restaurant', type: 'per_person_per_night', desc: 'Daily access to our lavish morning buffet overlooking the lake.', image: 'images/dining.png' },
+            { id: 'spa', name: 'Couples Ayurvedic Spa', price: 200, icon: 'spa', type: 'once', desc: 'A 90-minute signature couples massage session.', image: 'images/spa.png' },
+            { id: 'pickup', name: 'Airport Chauffeur', price: 80, icon: 'airport_shuttle', type: 'once', desc: 'Private luxury sedan transfer from Udaipur Airport.', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80' },
+            { id: 'early', name: 'Early Check-in', price: 50, icon: 'schedule', type: 'once', desc: 'Guaranteed room access from 10:00 AM.', image: 'images/pool.png' }
         ];
 
         const BookingHeader = () => (
-            <div class="bg-white border-b border-border-soft sticky top-0 z-50">
+            <div class="bg-white/90 backdrop-blur-md border-b border-border-soft sticky top-0 z-40 transition-all duration-300">
                 <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3 text-text-dark cursor-pointer hover:opacity-80" onClick={() => window.location.href = '/'}>
-                        <div class="text-primary"><span class="material-symbols-outlined text-4xl">local_florist</span></div>
+                    <div class="flex items-center gap-3 text-text-dark cursor-pointer group" onClick={() => window.location.href = '/'}>
+                        <div class="text-primary group-hover:rotate-45 transition-transform duration-500"><span class="material-symbols-outlined text-4xl">local_florist</span></div>
                         <h2 class="font-serif text-2xl font-bold tracking-tight">Aurum Grove</h2>
                     </div>
-                    <a href="/" class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Return Home</a>
+                    <a href="/" class="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">
+                        <span class="material-symbols-outlined text-lg">arrow_back</span> Return
+                    </a>
                 </div>
             </div>
         );
@@ -113,19 +144,19 @@
             const { state } = useBooking();
             const steps = ['Dates', 'Suites', 'Add-ons', 'Checkout', 'Done'];
             return (
-                <div class="flex items-center justify-between mb-12 relative">
-                    <div class="absolute top-1/2 left-0 w-full h-0.5 bg-border-soft -z-10"></div>
-                    <div class="absolute top-1/2 left-0 h-0.5 bg-primary -z-10 transition-all duration-500" style={{ width: `${((state.currentStep - 1) / 4) * 100}%` }}></div>
+                <div class="flex items-center justify-between mb-16 relative mt-8 animate-slide-up">
+                    <div class="absolute top-1/2 left-0 w-full h-[2px] bg-border-soft -z-10 rounded-full"></div>
+                    <div class="absolute top-1/2 left-0 h-[2px] bg-primary -z-10 transition-all duration-1000 ease-out rounded-full shadow-[0_0_10px_rgba(212,175,55,0.5)]" style={{ width: `${((state.currentStep - 1) / 4) * 100}%` }}></div>
                     {steps.map((label, index) => {
                         const stepNum = index + 1;
                         const isPast = stepNum < state.currentStep;
                         const isActive = stepNum === state.currentStep;
                         return (
                             <div key={stepNum} class="flex flex-col items-center">
-                                <div class={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${isActive ? 'bg-primary border-primary text-white shadow-glow transform scale-110' : isPast ? 'bg-primary border-primary text-white' : 'bg-white border-border-soft text-text-muted'}`}>
-                                    {isPast ? <span class="material-symbols-outlined text-lg">check</span> : stepNum}
+                                <div class={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-500 ${isActive ? 'bg-primary border-primary text-white shadow-[0_0_20px_rgba(212,175,55,0.4)] transform scale-110' : isPast ? 'bg-primary border-primary text-white' : 'bg-white border-border-soft text-text-muted'}`}>
+                                    {isPast ? <span class="material-symbols-outlined text-xl">done</span> : stepNum}
                                 </div>
-                                <span class={`absolute top-12 text-[10px] font-bold uppercase tracking-widest ${isActive || isPast ? 'text-text-dark' : 'text-text-muted'}`}>{label}</span>
+                                <span class={`absolute top-14 text-[11px] font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? 'text-primary' : isPast ? 'text-text-dark' : 'text-text-muted'}`}>{label}</span>
                             </div>
                         );
                     })}
@@ -150,54 +181,90 @@
             const total = subtotal + tax;
 
             return (
-                <div class="bg-surface-light border border-border-soft p-6 shadow-soft sticky top-24 fade-in">
-                    <h3 class="font-serif text-xl font-bold text-text-dark mb-6">Reservation Summary</h3>
-                    
-                    <div class="mb-6 pb-6 border-b border-border-soft space-y-4">
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Dates</p>
-                            <p class="text-sm font-medium text-text-dark">
-                                {stayDetails.checkIn ? new Date(stayDetails.checkIn).toLocaleDateString() : '---'} - {stayDetails.checkOut ? new Date(stayDetails.checkOut).toLocaleDateString() : '---'}
-                                <span class="text-text-muted ml-2">({nights} Nights)</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Guests</p>
-                            <p class="text-sm font-medium text-text-dark">{guests} Guests ({stayDetails.adults} Adults, {stayDetails.children} Children)</p>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 mb-6 pb-6 border-b border-border-soft">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-text-muted">{selectedRoom ? selectedRoom.name : 'No room selected'}</span>
-                            <span class="text-text-dark font-medium">${roomTotal.toFixed(2)}</span>
-                        </div>
-                        {selectedAddons.map(addon => (
-                            <div key={addon.id} class="flex justify-between text-sm">
-                                <span class="text-text-muted">{addon.name}</span>
-                                <span class="text-text-dark font-medium">${(addon.type === 'once' ? addon.price : addon.price * guests * nights).toFixed(2)}</span>
+                <div class="sticky top-24 animate-slide-up stagger-3">
+                    <div class="bg-surface-light p-8 shadow-2xl relative rounded-b-xl border border-border-soft border-t-0 mt-4">
+                        <div class="absolute -top-3 left-0 receipt-edge"></div>
+                        <h3 class="font-serif text-2xl font-bold text-text-dark mb-6 text-center">Reservation</h3>
+                        
+                        <div class="mb-6 pb-6 border-b border-dashed border-border-soft space-y-4">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-1">Check-in</p>
+                                    <p class="text-sm font-medium text-text-dark">{stayDetails.checkIn ? new Date(stayDetails.checkIn).toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '---'}</p>
+                                </div>
+                                <div class="text-center px-4">
+                                    <span class="material-symbols-outlined text-primary text-xl opacity-50">arrow_right_alt</span>
+                                    <p class="text-[10px] font-bold text-text-muted mt-1">{nights} Nights</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-1">Check-out</p>
+                                    <p class="text-sm font-medium text-text-dark">{stayDetails.checkOut ? new Date(stayDetails.checkOut).toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '---'}</p>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-
-                    <div class="space-y-2 mb-6 pb-6 border-b border-border-soft">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-text-muted">Subtotal</span>
-                            <span class="text-text-dark font-medium">${subtotal.toFixed(2)}</span>
+                            <div class="bg-background-light p-3 rounded-lg flex items-center justify-between mt-4">
+                                <span class="text-xs font-bold uppercase tracking-widest text-text-muted">Guests</span>
+                                <span class="text-sm font-medium text-text-dark">{guests} ({stayDetails.adults}A, {stayDetails.children}C)</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-text-muted">Taxes & Fees (18%)</span>
-                            <span class="text-text-dark font-medium">${tax.toFixed(2)}</span>
-                        </div>
-                    </div>
 
-                    <div class="flex justify-between items-end mb-6">
-                        <span class="text-text-dark font-bold">Total</span>
-                        <span class="text-primary font-serif italic text-3xl">${total.toFixed(2)}</span>
+                        <div class="space-y-3 mb-6 pb-6 border-b border-dashed border-border-soft">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-text-muted flex-1">{selectedRoom ? selectedRoom.name : 'No room selected'}</span>
+                                <span class="text-text-dark font-medium">${roomTotal.toFixed(2)}</span>
+                            </div>
+                            {selectedAddons.map(addon => (
+                                <div key={addon.id} class="flex justify-between text-sm">
+                                    <span class="text-text-muted flex-1 pr-4 text-[13px]">{addon.name}</span>
+                                    <span class="text-text-dark font-medium">${(addon.type === 'once' ? addon.price : addon.price * guests * nights).toFixed(2)}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div class="space-y-2 mb-6 pb-6 border-b border-dashed border-border-soft">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-text-muted">Subtotal</span>
+                                <span class="text-text-dark font-medium">${subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-text-muted">Taxes & Fees (18%)</span>
+                                <span class="text-text-dark font-medium">${tax.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-6 bg-primary/5 p-4 rounded-lg border border-primary/20">
+                            <span class="text-text-dark font-bold uppercase tracking-widest text-sm">Total</span>
+                            <span class="text-primary font-serif italic text-3xl font-bold">${total.toFixed(2)}</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-[11px] text-text-muted justify-center bg-background-light py-2 rounded-full">
+                            <span class="material-symbols-outlined text-sm">verified_user</span>
+                            Free cancellation up to 48 hours before check-in.
+                        </div>
                     </div>
                 </div>
             );
         };
+
+        const FloatingInput = ({ type, id, label, value, onChange, min, maxLength, error }) => (
+            <div class="relative w-full">
+                <input 
+                    type={type} 
+                    id={id} 
+                    value={value} 
+                    onChange={onChange}
+                    min={min}
+                    maxLength={maxLength}
+                    class={`float-input peer w-full border-0 border-b-2 bg-transparent pt-6 pb-2 px-0 text-text-dark focus:ring-0 shadow-none rounded-none transition-colors ${error ? 'border-red-500 focus:border-red-500' : 'border-border-soft focus:border-primary'} ${!value && 'placeholder-transparent'}`} 
+                    placeholder=" "
+                />
+                <label 
+                    htmlFor={id} 
+                    class="absolute text-[13px] font-bold uppercase tracking-widest text-text-muted duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3"
+                >
+                    {label}
+                </label>
+            </div>
+        );
 
         const StepDates = () => {
             const { state, dispatch } = useBooking();
@@ -215,38 +282,35 @@
             const today = new Date().toISOString().split('T')[0];
 
             return (
-                <div class="fade-in max-w-2xl mx-auto mt-8">
-                    <div class="text-center mb-10">
-                        <span class="text-primary font-bold text-sm uppercase tracking-widest mb-2 block">Step 1</span>
-                        <h2 class="font-serif text-4xl font-bold text-text-dark">When will you be staying?</h2>
+                <div class="max-w-2xl mx-auto mt-8">
+                    <div class="text-center mb-12 animate-slide-up">
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest mb-3 block">Step 1</span>
+                        <h2 class="font-serif text-4xl md:text-5xl font-bold text-text-dark">Plan Your Escape</h2>
+                        <p class="text-text-muted mt-4 font-light text-lg">Select the dates and guests for your royal experience.</p>
                     </div>
-                    {error && <div class="bg-red-50 text-red-600 p-4 border border-red-200 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined">error</span> {error}</div>}
-                    <div class="bg-surface-light border border-border-soft p-8 shadow-soft">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <div class="flex flex-col">
-                                <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-2">Check-in Date</label>
-                                <input type="date" value={stayDetails.checkIn} min={today} onChange={(e) => handleChange('checkIn', e.target.value)} class="border-border-soft text-text-dark focus:border-primary focus:ring-1 focus:ring-primary p-3" />
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-2">Check-out Date</label>
-                                <input type="date" value={stayDetails.checkOut} min={stayDetails.checkIn || today} onChange={(e) => handleChange('checkOut', e.target.value)} class="border-border-soft text-text-dark focus:border-primary focus:ring-1 focus:ring-primary p-3" />
-                            </div>
+                    {error && <div class="bg-red-50 text-red-600 p-4 rounded-xl border border-red-200 text-sm mb-8 flex items-center gap-3 animate-slide-up"><span class="material-symbols-outlined">error</span> {error}</div>}
+                    <div class="bg-surface-light border border-border-soft p-10 rounded-2xl shadow-soft animate-slide-up stagger-1">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+                            <FloatingInput type="date" id="checkIn" label="Check-in Date" value={stayDetails.checkIn} min={today} onChange={(e) => handleChange('checkIn', e.target.value)} />
+                            <FloatingInput type="date" id="checkOut" label="Check-out Date" value={stayDetails.checkOut} min={stayDetails.checkIn || today} onChange={(e) => handleChange('checkOut', e.target.value)} />
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                            <div class="flex flex-col">
-                                <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-2">Adults</label>
-                                <select value={stayDetails.adults} onChange={(e) => handleChange('adults', e.target.value)} class="border-border-soft text-text-dark focus:border-primary focus:ring-1 focus:ring-primary p-3 bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+                            <div class="relative w-full">
+                                <label class="absolute text-[10px] font-bold uppercase tracking-widest text-primary -top-4 left-0">Adults</label>
+                                <select value={stayDetails.adults} onChange={(e) => handleChange('adults', e.target.value)} class="w-full border-0 border-b-2 border-border-soft bg-transparent pt-2 pb-2 px-0 text-text-dark focus:ring-0 focus:border-primary shadow-none rounded-none text-lg cursor-pointer">
                                     {[1, 2, 3, 4, 5, 6].map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
                             </div>
-                            <div class="flex flex-col">
-                                <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-2">Children (0-12 yrs)</label>
-                                <select value={stayDetails.children} onChange={(e) => handleChange('children', e.target.value)} class="border-border-soft text-text-dark focus:border-primary focus:ring-1 focus:ring-primary p-3 bg-white">
+                            <div class="relative w-full">
+                                <label class="absolute text-[10px] font-bold uppercase tracking-widest text-primary -top-4 left-0">Children (0-12 yrs)</label>
+                                <select value={stayDetails.children} onChange={(e) => handleChange('children', e.target.value)} class="w-full border-0 border-b-2 border-border-soft bg-transparent pt-2 pb-2 px-0 text-text-dark focus:ring-0 focus:border-primary shadow-none rounded-none text-lg cursor-pointer">
                                     {[0, 1, 2, 3, 4].map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
                             </div>
                         </div>
-                        <button onClick={handleNext} class="w-full bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors shadow-glow hover:shadow-lg">View Available Suites</button>
+                        <button onClick={handleNext} class="w-full bg-text-dark hover:bg-black text-white font-bold uppercase tracking-widest text-sm py-5 rounded-full transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.2)] transform hover:-translate-y-1">
+                            Check Availability
+                        </button>
                     </div>
                 </div>
             );
@@ -259,49 +323,61 @@
             const availableRooms = roomsDatabase.filter(r => r.capacity >= guests);
 
             const handleNext = () => {
-                if (!selectedRoom) return alert('Please select a suite.');
+                if (!selectedRoom) return alert('Please select a suite to continue.');
                 dispatch({ type: 'SET_CURRENT_STEP', payload: 3 });
             };
 
             return (
-                <div class="fade-in">
-                    <div class="mb-10">
-                        <span class="text-primary font-bold text-sm uppercase tracking-widest mb-2 block">Step 2</span>
-                        <h2 class="font-serif text-3xl font-bold text-text-dark">Select Your Suite</h2>
+                <div>
+                    <div class="mb-12 animate-slide-up">
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest mb-3 block">Step 2</span>
+                        <h2 class="font-serif text-4xl font-bold text-text-dark">Select Your Sanctuary</h2>
+                        <p class="text-text-muted mt-2 font-light text-lg">Showing {availableRooms.length} luxurious suites available for {guests} guests.</p>
                     </div>
-                    <div class="space-y-6 mb-8">
-                        {availableRooms.map(room => (
-                            <div key={room.id} class={`flex flex-col md:flex-row bg-surface-light border cursor-pointer transition-all ${selectedRoom?.id === room.id ? 'border-primary shadow-glow' : 'border-border-soft hover:border-primary/50'}`} onClick={() => dispatch({ type: 'SET_SELECTED_ROOM', payload: room })}>
-                                <div class="md:w-1/3 h-48 md:h-auto relative overflow-hidden group">
-                                    <img src={room.image} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={room.name} />
-                                    {selectedRoom?.id === room.id && <div class="absolute inset-0 bg-primary/20 flex items-center justify-center backdrop-blur-[1px]"><span class="bg-white text-primary rounded-full p-2 material-symbols-outlined shadow-lg font-bold">check</span></div>}
+                    <div class="space-y-8 mb-10">
+                        {availableRooms.map((room, index) => (
+                            <div key={room.id} class={`animate-slide-up flex flex-col md:flex-row bg-surface-light rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 border-2 ${selectedRoom?.id === room.id ? 'border-primary shadow-[0_10px_40px_rgba(212,175,55,0.2)] transform scale-[1.02]' : 'border-border-soft hover:border-primary/50 hover:shadow-soft'}`} style={{animationDelay: `${index * 0.15}s`}} onClick={() => dispatch({ type: 'SET_SELECTED_ROOM', payload: room })}>
+                                <div class="md:w-2/5 h-64 md:h-auto relative overflow-hidden group">
+                                    <img src={room.image} class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={room.name} />
+                                    {selectedRoom?.id === room.id && (
+                                        <div class="absolute inset-0 bg-primary/20 flex items-center justify-center backdrop-blur-[2px]">
+                                            <span class="bg-white text-primary rounded-full p-3 material-symbols-outlined shadow-xl font-bold text-3xl animate-fade-in-up">check</span>
+                                        </div>
+                                    )}
                                 </div>
-                                <div class="p-6 md:w-2/3 flex flex-col justify-between">
+                                <div class="p-8 md:w-3/5 flex flex-col justify-between">
                                     <div>
                                         <div class="flex justify-between items-start mb-2">
-                                            <h3 class="font-serif text-2xl font-bold text-text-dark">{room.name}</h3>
-                                            <div class="text-right">
-                                                <span class="text-primary font-serif italic text-2xl block">${room.price}</span>
-                                                <span class="text-xs text-text-muted uppercase tracking-widest">per night</span>
+                                            <h3 class="font-serif text-3xl font-bold text-text-dark">{room.name}</h3>
+                                            <div class="text-right bg-background-light px-4 py-2 rounded-xl border border-border-soft">
+                                                <span class="text-primary font-serif italic text-2xl block font-bold">${room.price}</span>
+                                                <span class="text-[10px] text-text-muted uppercase tracking-widest font-bold">per night</span>
                                             </div>
                                         </div>
-                                        <p class="text-sm text-text-muted mb-4">Up to {room.capacity} Guests • {room.size}m²</p>
-                                        <div class="flex flex-wrap gap-4">
-                                            {room.amenities.map(a => <span key={a} class="text-xs font-medium bg-background-light px-3 py-1 border border-border-soft text-text-dark">{a}</span>)}
+                                        <p class="text-sm text-text-muted mb-6 flex items-center gap-4">
+                                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">group</span> {room.capacity} Guests</span>
+                                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">aspect_ratio</span> {room.size}m²</span>
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            {room.amenities.map(a => <span key={a} class="text-[11px] font-bold uppercase tracking-widest bg-background-alt px-3 py-1.5 rounded-full text-text-muted">{a}</span>)}
                                         </div>
                                     </div>
-                                    <div class="mt-6 text-right">
-                                        <button class={`px-6 py-2 text-sm font-bold uppercase tracking-widest border transition-colors ${selectedRoom?.id === room.id ? 'bg-primary border-primary text-white shadow-glow' : 'border-text-dark text-text-dark hover:bg-text-dark hover:text-white'}`}>
-                                            {selectedRoom?.id === room.id ? 'Selected' : 'Select Suite'}
+                                    <div class="mt-8 text-right">
+                                        <button class={`px-8 py-3 text-sm font-bold uppercase tracking-widest rounded-full transition-all duration-300 ${selectedRoom?.id === room.id ? 'bg-primary text-white shadow-glow' : 'border border-text-dark text-text-dark hover:bg-text-dark hover:text-white'}`}>
+                                            {selectedRoom?.id === room.id ? 'Suite Selected' : 'Select Suite'}
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div class="flex gap-4">
-                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 1 })} class="px-8 py-4 border border-text-dark text-text-dark font-bold uppercase tracking-widest text-sm hover:bg-text-dark hover:text-white transition-colors">Back</button>
-                        <button onClick={handleNext} disabled={!selectedRoom} class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Continue to Add-ons</button>
+                    <div class="flex gap-6 animate-slide-up stagger-3">
+                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 1 })} class="px-10 py-5 border-2 border-border-soft text-text-dark font-bold uppercase tracking-widest text-sm hover:border-text-dark transition-colors rounded-full flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">arrow_back</span> Back
+                        </button>
+                        <button onClick={handleNext} disabled={!selectedRoom} class="flex-1 bg-text-dark hover:bg-black text-white font-bold uppercase tracking-widest text-sm py-5 rounded-full transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                            Review Add-ons <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                        </button>
                     </div>
                 </div>
             );
@@ -311,35 +387,48 @@
             const { state, dispatch } = useBooking();
             const { selectedAddons } = state;
             return (
-                <div class="fade-in">
-                    <div class="mb-10">
-                        <span class="text-primary font-bold text-sm uppercase tracking-widest mb-2 block">Step 3</span>
-                        <h2 class="font-serif text-3xl font-bold text-text-dark">Enhance Your Stay</h2>
-                        <p class="text-text-muted text-sm mt-2 font-light">Select optional upgrades for a more memorable experience.</p>
+                <div>
+                    <div class="mb-12 animate-slide-up">
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest mb-3 block">Step 3</span>
+                        <h2 class="font-serif text-4xl font-bold text-text-dark">Elevate Your Stay</h2>
+                        <p class="text-text-muted mt-2 font-light text-lg">Indulge in our curated selection of premium experiences.</p>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-                        {addonsDatabase.map(addon => {
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                        {addonsDatabase.map((addon, index) => {
                             const isSelected = selectedAddons.find(a => a.id === addon.id);
                             return (
-                                <div key={addon.id} onClick={() => dispatch({ type: 'TOGGLE_ADDON', payload: addon })} class={`p-6 border cursor-pointer transition-all ${isSelected ? 'border-primary bg-primary/5 shadow-glow transform -translate-y-1' : 'border-border-soft bg-surface-light hover:border-primary/50 hover:shadow-soft'}`}>
-                                    <div class="flex justify-between items-start mb-4">
-                                        <span class={`material-symbols-outlined text-3xl ${isSelected ? 'text-primary' : 'text-text-muted'}`}>{addon.icon}</span>
-                                        <div class={`w-6 h-6 rounded-full border flex items-center justify-center ${isSelected ? 'bg-primary border-primary text-white' : 'border-border-soft'}`}>
-                                            {isSelected && <span class="material-symbols-outlined text-sm font-bold">check</span>}
+                                <div key={addon.id} onClick={() => dispatch({ type: 'TOGGLE_ADDON', payload: addon })} class={`animate-slide-up relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 h-64 group border-2 ${isSelected ? 'border-primary shadow-glow transform -translate-y-2' : 'border-transparent shadow-soft hover:shadow-xl'}`} style={{animationDelay: `${index * 0.1}s`}}>
+                                    <img src={addon.image} class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                    <div class={`absolute inset-0 transition-colors duration-500 ${isSelected ? 'bg-black/60' : 'bg-gradient-to-t from-black/90 via-black/40 to-transparent'}`}></div>
+                                    
+                                    <div class="absolute top-4 right-4 z-10">
+                                        <div class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary text-white' : 'border-white/50 text-transparent'}`}>
+                                            <span class="material-symbols-outlined text-sm font-bold">check</span>
                                         </div>
                                     </div>
-                                    <h4 class="font-bold text-text-dark mb-1">{addon.name}</h4>
-                                    <p class="text-xs text-text-muted mb-4 h-8">{addon.desc}</p>
-                                    <p class="text-primary font-serif italic text-xl">
-                                        ${addon.price} <span class="text-xs text-text-muted not-italic font-sans block">{addon.type === 'once' ? 'Total (One time)' : 'Per Person / Per Night'}</span>
-                                    </p>
+
+                                    <div class="absolute bottom-0 left-0 w-full p-6 text-white z-10">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="material-symbols-outlined text-primary">{addon.icon}</span>
+                                            <h4 class="font-bold text-xl">{addon.name}</h4>
+                                        </div>
+                                        <p class="text-xs text-white/80 mb-3 h-8 leading-relaxed font-light">{addon.desc}</p>
+                                        <div class="flex items-end justify-between border-t border-white/20 pt-3">
+                                            <span class="text-[10px] uppercase tracking-widest text-primary font-bold">{addon.type === 'once' ? 'One time fee' : 'Per Person / Night'}</span>
+                                            <span class="font-serif italic text-2xl font-bold">${addon.price}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         })}
                     </div>
-                    <div class="flex gap-4">
-                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 2 })} class="px-8 py-4 border border-text-dark text-text-dark font-bold uppercase tracking-widest text-sm hover:bg-text-dark hover:text-white transition-colors">Back</button>
-                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 4 })} class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors shadow-glow hover:shadow-lg">Continue to Checkout</button>
+                    <div class="flex gap-6 animate-slide-up stagger-3">
+                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 2 })} class="px-10 py-5 border-2 border-border-soft text-text-dark font-bold uppercase tracking-widest text-sm hover:border-text-dark transition-colors rounded-full flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">arrow_back</span> Back
+                        </button>
+                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 4 })} class="flex-1 bg-text-dark hover:bg-black text-white font-bold uppercase tracking-widest text-sm py-5 rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                            Proceed to Checkout <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                        </button>
                     </div>
                 </div>
             );
@@ -348,9 +437,12 @@
         const StepCheckout = () => {
             const { state, dispatch } = useBooking();
             const { guestDetails, paymentDetails, stayDetails, selectedRoom, selectedAddons, isLoading } = state;
-            const [error, setError] = useState('');
+            const [errors, setErrors] = useState({});
 
-            const handleGuest = (field, value) => dispatch({ type: 'SET_GUEST_DETAILS', payload: { [field]: value } });
+            const handleGuest = (field, value) => {
+                dispatch({ type: 'SET_GUEST_DETAILS', payload: { [field]: value } });
+                setErrors({...errors, [field]: false});
+            };
             const handlePay = (field, value) => {
                 let formatted = value;
                 if (field === 'cardNumber') formatted = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
@@ -359,13 +451,25 @@
                     if (formatted.length >= 2) formatted = formatted.slice(0, 2) + '/' + formatted.slice(2, 4);
                 }
                 dispatch({ type: 'SET_PAYMENT', payload: { [field]: formatted } });
+                setErrors({...errors, [field]: false});
             };
 
             const handleSubmit = () => {
-                if (!guestDetails.firstName || !guestDetails.lastName || !guestDetails.email || !guestDetails.phone) return setError('Please fill in all guest details.');
-                if (paymentDetails.cardNumber.length < 19 || paymentDetails.expiry.length < 5 || paymentDetails.cvc.length < 3) return setError('Please complete payment details.');
+                const newErrors = {};
+                if (!guestDetails.firstName) newErrors.firstName = true;
+                if (!guestDetails.lastName) newErrors.lastName = true;
+                if (!guestDetails.email || !guestDetails.email.includes('@')) newErrors.email = true;
+                if (!guestDetails.phone) newErrors.phone = true;
+                if (paymentDetails.cardNumber.length < 19) newErrors.cardNumber = true;
+                if (paymentDetails.expiry.length < 5) newErrors.expiry = true;
+                if (paymentDetails.cvc.length < 3) newErrors.cvc = true;
                 
-                setError('');
+                if (Object.keys(newErrors).length > 0) {
+                    setErrors(newErrors);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                
                 dispatch({ type: 'SET_LOADING', payload: true });
 
                 setTimeout(() => {
@@ -378,53 +482,70 @@
                     const total = subtotal + (subtotal * 0.18);
 
                     dispatch({ type: 'SET_CONFIRMATION', payload: {
-                        id: 'AG-' + Math.floor(Math.random() * 1000000),
+                        id: 'AG-' + Math.floor(100000 + Math.random() * 900000),
                         name: guestDetails.firstName + ' ' + guestDetails.lastName,
                         email: guestDetails.email,
                         total: total
                     }});
                     dispatch({ type: 'SET_CURRENT_STEP', payload: 5 });
-                }, 2000);
+                }, 3000);
             };
 
             return (
-                <div class="fade-in">
-                    <div class="mb-8">
-                        <span class="text-primary font-bold text-sm uppercase tracking-widest mb-2 block">Step 4</span>
-                        <h2 class="font-serif text-3xl font-bold text-text-dark">Details & Payment</h2>
+                <div class="relative">
+                    {/* Loading Overlay */}
+                    {isLoading && (
+                        <div class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-md animate-fade-in-up">
+                            <div class="w-24 h-24 border-4 border-border-soft border-t-primary rounded-full animate-spin mb-8 shadow-glow"></div>
+                            <h2 class="font-serif text-3xl font-bold text-text-dark mb-2">Securing Your Reservation</h2>
+                            <p class="text-text-muted uppercase tracking-widest text-xs font-bold animate-pulse">Processing secure payment...</p>
+                        </div>
+                    )}
+
+                    <div class="mb-12 animate-slide-up">
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest mb-3 block">Step 4</span>
+                        <h2 class="font-serif text-4xl font-bold text-text-dark">Guest & Payment Details</h2>
                     </div>
-                    {error && <div class="bg-red-50 text-red-600 p-4 border border-red-200 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined">error</span> {error}</div>}
-                    <div class="space-y-8">
-                        <div class="bg-surface-light border border-border-soft p-6 shadow-soft">
-                            <h3 class="font-serif text-xl font-bold text-text-dark mb-4 border-b border-border-soft pb-2">Guest Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <input type="text" placeholder="First Name *" value={guestDetails.firstName} onChange={e => handleGuest('firstName', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary" />
-                                <input type="text" placeholder="Last Name *" value={guestDetails.lastName} onChange={e => handleGuest('lastName', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary" />
-                                <input type="email" placeholder="Email Address *" value={guestDetails.email} onChange={e => handleGuest('email', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary" />
-                                <input type="tel" placeholder="Phone Number *" value={guestDetails.phone} onChange={e => handleGuest('phone', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary" />
+
+                    <div class="space-y-10">
+                        <div class="bg-surface-light border border-border-soft p-10 rounded-2xl shadow-soft animate-slide-up stagger-1">
+                            <h3 class="font-serif text-2xl font-bold text-text-dark mb-8 flex items-center gap-3"><span class="material-symbols-outlined text-primary">person</span> Guest Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                                <FloatingInput type="text" id="fname" label="First Name" value={guestDetails.firstName} onChange={e => handleGuest('firstName', e.target.value)} error={errors.firstName} />
+                                <FloatingInput type="text" id="lname" label="Last Name" value={guestDetails.lastName} onChange={e => handleGuest('lastName', e.target.value)} error={errors.lastName} />
+                                <FloatingInput type="email" id="email" label="Email Address" value={guestDetails.email} onChange={e => handleGuest('email', e.target.value)} error={errors.email} />
+                                <FloatingInput type="tel" id="phone" label="Phone Number" value={guestDetails.phone} onChange={e => handleGuest('phone', e.target.value)} error={errors.phone} />
                             </div>
                         </div>
-                        <div class="bg-surface-light border border-border-soft p-6 shadow-soft">
-                            <div class="flex justify-between items-center border-b border-border-soft pb-2 mb-4">
-                                <h3 class="font-serif text-xl font-bold text-text-dark">Payment Method</h3>
-                                <div class="flex gap-2">
-                                    <span class="material-symbols-outlined text-text-muted">credit_card</span>
-                                    <span class="material-symbols-outlined text-text-muted">lock</span>
+
+                        <div class="bg-surface-light border border-border-soft p-10 rounded-2xl shadow-soft animate-slide-up stagger-2">
+                            <div class="flex justify-between items-center mb-8">
+                                <h3 class="font-serif text-2xl font-bold text-text-dark flex items-center gap-3"><span class="material-symbols-outlined text-primary">credit_card</span> Payment Method</h3>
+                                <div class="flex gap-2 bg-background-light px-3 py-1 rounded-full border border-border-soft">
+                                    <span class="material-symbols-outlined text-primary text-sm">lock</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-text-muted mt-0.5">Secure SSL</span>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="md:col-span-2">
-                                    <input type="text" placeholder="Card Number *" value={paymentDetails.cardNumber} maxLength="19" onChange={e => handlePay('cardNumber', e.target.value)} class="w-full border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary font-mono" />
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                                <div class="md:col-span-2 relative">
+                                    <FloatingInput type="text" id="card" label="Card Number" value={paymentDetails.cardNumber} maxLength="19" onChange={e => handlePay('cardNumber', e.target.value)} error={errors.cardNumber} />
+                                    <div class="absolute right-0 top-6 flex gap-1">
+                                        <div class="w-8 h-5 bg-gray-200 rounded"></div>
+                                        <div class="w-8 h-5 bg-gray-200 rounded"></div>
+                                    </div>
                                 </div>
-                                <input type="text" placeholder="MM/YY *" value={paymentDetails.expiry} maxLength="5" onChange={e => handlePay('expiry', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary font-mono" />
-                                <input type="text" placeholder="CVC *" value={paymentDetails.cvc} maxLength="4" onChange={e => handlePay('cvc', e.target.value)} class="border-border-soft p-3 focus:ring-1 focus:ring-primary focus:border-primary font-mono" />
+                                <FloatingInput type="text" id="exp" label="Expiry (MM/YY)" value={paymentDetails.expiry} maxLength="5" onChange={e => handlePay('expiry', e.target.value)} error={errors.expiry} />
+                                <FloatingInput type="text" id="cvc" label="Security Code (CVC)" value={paymentDetails.cvc} maxLength="4" onChange={e => handlePay('cvc', e.target.value)} error={errors.cvc} />
                             </div>
                         </div>
                     </div>
-                    <div class="flex gap-4 mt-8">
-                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 3 })} disabled={isLoading} class="px-8 py-4 border border-text-dark text-text-dark font-bold uppercase tracking-widest text-sm hover:bg-text-dark hover:text-white transition-colors disabled:opacity-50">Back</button>
-                        <button onClick={handleSubmit} disabled={isLoading} class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold uppercase tracking-widest text-sm py-4 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-glow hover:shadow-lg">
-                            {isLoading ? <span class="material-symbols-outlined animate-spin">refresh</span> : 'Complete Reservation'}
+
+                    <div class="flex gap-6 mt-12 animate-slide-up stagger-3">
+                        <button onClick={() => dispatch({ type: 'SET_CURRENT_STEP', payload: 3 })} disabled={isLoading} class="px-10 py-5 border-2 border-border-soft text-text-dark font-bold uppercase tracking-widest text-sm hover:border-text-dark transition-colors rounded-full flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">arrow_back</span> Back
+                        </button>
+                        <button onClick={handleSubmit} disabled={isLoading} class="flex-1 bg-text-dark hover:bg-black text-white font-bold uppercase tracking-widest text-sm py-5 rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex justify-center items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">lock</span> Confirm & Pay
                         </button>
                     </div>
                 </div>
@@ -439,79 +560,95 @@
             const downloadPDF = () => {
                 const element = receiptRef.current;
                 const opt = {
-                    margin:       1,
+                    margin:       [0.5, 0.5],
                     filename:     `Aurum_Grove_Reservation_${confirmation.id}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2 },
+                    image:        { type: 'jpeg', quality: 1 },
+                    html2canvas:  { scale: 2, useCORS: true },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
                 html2pdf().set(opt).from(element).save();
             };
 
             return (
-                <div class="fade-in max-w-3xl mx-auto mt-8 text-center">
-                    <div class="mb-8">
-                        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow">
-                            <span class="material-symbols-outlined text-5xl text-primary">check_circle</span>
+                <div class="max-w-3xl mx-auto mt-8 text-center animate-slide-up">
+                    <div class="mb-12">
+                        <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow animate-pulse">
+                            <span class="material-symbols-outlined text-6xl text-primary">task_alt</span>
                         </div>
-                        <h2 class="font-serif text-4xl font-bold text-text-dark mb-4">Reservation Confirmed</h2>
-                        <p class="text-text-muted text-lg font-light">Thank you, {confirmation.name}. We look forward to welcoming you to Aurum Grove.</p>
+                        <h2 class="font-serif text-5xl font-bold text-text-dark mb-4">Reservation Confirmed</h2>
+                        <p class="text-text-muted text-xl font-light">Thank you, {confirmation.name}. Your royal experience awaits.</p>
                     </div>
 
-                    <div ref={receiptRef} class="bg-surface-light border border-border-soft p-8 text-left mb-10 shadow-soft relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
-                        <div class="flex justify-between items-end border-b border-border-soft pb-4 mb-6 mt-2">
+                    <div ref={receiptRef} class="bg-surface-light border border-border-soft p-10 text-left mb-12 shadow-2xl relative overflow-hidden rounded-xl animate-slide-up stagger-1">
+                        <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-primary-light via-primary to-primary-dark"></div>
+                        
+                        <div class="flex justify-between items-start border-b border-border-soft pb-8 mb-8 mt-4">
                             <div>
-                                <h3 class="font-serif text-2xl font-bold text-text-dark mb-1">Aurum Grove</h3>
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted">Confirmation #{confirmation.id}</p>
+                                <div class="flex items-center gap-2 mb-2 text-primary">
+                                    <span class="material-symbols-outlined text-2xl">local_florist</span>
+                                    <h3 class="font-serif text-2xl font-bold text-text-dark">Aurum Grove</h3>
+                                </div>
+                                <p class="text-xs text-text-muted">Lake Pichola Road, Udaipur, 313001</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Total Paid</p>
-                                <p class="font-serif italic text-3xl text-primary">${confirmation.total.toFixed(2)}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-1">Confirmation Number</p>
+                                <p class="font-mono text-xl font-bold text-text-dark tracking-wider">{confirmation.id}</p>
+                                <p class="text-[10px] uppercase tracking-widest text-primary font-bold mt-2">Paid in Full</p>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 bg-background-light p-6 rounded-xl border border-border-soft">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Check-in</p>
-                                <p class="text-sm font-medium">{new Date(stayDetails.checkIn).toLocaleDateString()}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2">Check-in</p>
+                                <p class="text-sm font-bold text-text-dark">{new Date(stayDetails.checkIn).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</p>
+                                <p class="text-xs text-text-muted mt-1">3:00 PM</p>
                             </div>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Check-out</p>
-                                <p class="text-sm font-medium">{new Date(stayDetails.checkOut).toLocaleDateString()}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2">Check-out</p>
+                                <p class="text-sm font-bold text-text-dark">{new Date(stayDetails.checkOut).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})}</p>
+                                <p class="text-xs text-text-muted mt-1">11:00 AM</p>
                             </div>
                             <div class="md:col-span-2">
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Suite</p>
-                                <p class="text-sm font-medium flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-primary text-sm">bed</span>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-2">Suite Reserved</p>
+                                <p class="text-sm font-bold text-text-dark flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-lg">bed</span>
                                     {selectedRoom.name}
                                 </p>
                             </div>
                         </div>
                         
                         {selectedAddons.length > 0 && (
-                            <div class="border-t border-border-soft pt-4">
-                                <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">Included Add-ons</p>
-                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="border-t border-border-soft pt-8 mb-8">
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-text-muted mb-4">Included Experiences</p>
+                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {selectedAddons.map(addon => (
-                                        <li key={addon.id} class="text-sm font-medium flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-primary text-sm">{addon.icon}</span>
+                                        <li key={addon.id} class="text-sm font-medium flex items-center gap-3 bg-background-light p-3 rounded-lg border border-border-soft">
+                                            <span class="material-symbols-outlined text-primary bg-white p-2 rounded-full shadow-sm">{addon.icon}</span>
                                             {addon.name}
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         )}
-                        <div class="mt-8 pt-4 border-t border-border-soft text-center text-xs text-text-muted italic">
-                            Thank you for booking with Aurum Grove Hotel & Suites. Udaipur, India.
+                        
+                        <div class="flex justify-between items-center bg-primary/5 p-6 rounded-xl border border-primary/20">
+                            <span class="text-text-dark font-bold uppercase tracking-widest text-sm">Total Paid</span>
+                            <span class="font-serif italic text-4xl text-primary font-bold">${confirmation.total.toFixed(2)}</span>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-dashed border-border-soft text-center text-xs text-text-muted font-light leading-relaxed">
+                            A confirmation email has been sent to {confirmation.email}.<br/>
+                            For any special requests, contact our concierge at reservations@aurumgrove.com.
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="/" class="px-8 py-4 bg-text-dark text-white font-bold uppercase tracking-widest text-sm hover:bg-black transition-colors shadow-lg">Return to Home</a>
-                        <button onClick={downloadPDF} class="px-8 py-4 border border-text-dark text-text-dark font-bold uppercase tracking-widest text-sm hover:bg-text-dark hover:text-white transition-colors flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">download</span> Download PDF
+                    <div class="flex flex-col sm:flex-row justify-center gap-6 animate-slide-up stagger-2">
+                        <button onClick={downloadPDF} class="px-10 py-5 border-2 border-text-dark text-text-dark font-bold uppercase tracking-widest text-sm hover:bg-text-dark hover:text-white transition-colors rounded-full flex items-center justify-center gap-3 shadow-soft">
+                            <span class="material-symbols-outlined">download</span> Download PDF Receipt
                         </button>
+                        <a href="/" class="px-10 py-5 bg-text-dark text-white font-bold uppercase tracking-widest text-sm hover:bg-black transition-colors rounded-full flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                            <span class="material-symbols-outlined">home</span> Return to Home
+                        </a>
                     </div>
                 </div>
             );
@@ -523,12 +660,12 @@
             useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [currentStep]);
 
             return (
-                <div class="min-h-screen bg-background-alt pb-20">
+                <div class="min-h-screen bg-background-alt pb-24 font-sans">
                     <BookingHeader />
-                    <div class="max-w-[1280px] mx-auto px-6 pt-12">
+                    <div class="max-w-[1280px] mx-auto px-6 pt-6">
                         {currentStep < 5 && <StepIndicator />}
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                            <div class={currentStep === 1 || currentStep === 5 ? "lg:col-span-3" : "lg:col-span-2"}>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                            <div class={currentStep === 1 || currentStep === 5 ? "lg:col-span-12" : "lg:col-span-8"}>
                                 {currentStep === 1 && <StepDates />}
                                 {currentStep === 2 && <StepSuites />}
                                 {currentStep === 3 && <StepAddons />}
@@ -536,10 +673,52 @@
                                 {currentStep === 5 && <StepConfirmation />}
                             </div>
                             {(currentStep > 1 && currentStep < 5) && (
-                                <div class="hidden lg:block lg:col-span-1"><OrderSummary /></div>
+                                <div class="hidden lg:block lg:col-span-4">
+                                    <OrderSummary />
+                                </div>
                             )}
                         </div>
                     </div>
+                    {/* Footer */}
+                    <footer class="mt-24 border-t border-border-soft bg-white pt-16 pb-8">
+                        <div class="max-w-[1280px] mx-auto px-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                                <div class="col-span-1 md:col-span-2">
+                                    <div class="flex items-center gap-3 text-primary mb-6">
+                                        <span class="material-symbols-outlined text-4xl">local_florist</span>
+                                        <h2 class="font-serif text-3xl font-bold text-text-dark">Aurum Grove</h2>
+                                    </div>
+                                    <p class="text-text-muted font-light leading-relaxed max-w-sm">
+                                        Experience the pinnacle of luxury and heritage. A royal sanctuary designed for the modern traveler.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-text-dark uppercase tracking-widest text-xs mb-6">Contact</h4>
+                                    <ul class="space-y-4 text-text-muted text-sm">
+                                        <li>+91 294 2433 200</li>
+                                        <li>reservations@aurumgrove.com</li>
+                                        <li>Lake Pichola Road, Udaipur</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-text-dark uppercase tracking-widest text-xs mb-6">Legal</h4>
+                                    <ul class="space-y-4 text-text-muted text-sm">
+                                        <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                                        <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
+                                        <li><a href="#" class="hover:text-primary transition-colors">Cancellation Policy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="border-t border-border-soft pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-text-muted font-bold uppercase tracking-widest">
+                                <span>&copy; 2026 Aurum Grove Hotel & Suites. All rights reserved.</span>
+                                <div class="flex gap-4 mt-4 md:mt-0">
+                                    <a href="#" class="hover:text-primary transition-colors">Instagram</a>
+                                    <a href="#" class="hover:text-primary transition-colors">Facebook</a>
+                                    <a href="#" class="hover:text-primary transition-colors">Twitter</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             );
         };
