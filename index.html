@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aurum Grove Hotel & Suites | Udaipur</title>
-    
+
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
@@ -33,387 +37,521 @@
         }
     </script>
     <style>
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #FAFAFA; }
-        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #B5952F; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FAFAFA;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B5952F;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Chatbot Styles */
-        #chatbot-container { transition: all 0.3s ease; transform-origin: bottom right; }
-        #chatbot-container.hidden { transform: scale(0); opacity: 0; pointer-events: none; }
-        #chatbot-container.visible { transform: scale(1); opacity: 1; pointer-events: auto; }
-        .chat-message { animation: fadeIn 0.3s ease-out; }
+        #chatbot-container {
+            transition: all 0.3s ease;
+            transform-origin: bottom right;
+        }
+
+        #chatbot-container.hidden {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #chatbot-container.visible {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .chat-message {
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 </head>
-<body class="bg-background-light text-text-dark font-sans antialiased overflow-x-hidden selection:bg-primary-light selection:text-white">
 
-<!-- Sticky Navigation -->
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-border-soft transition-all duration-300" id="navbar">
-    <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3 text-text-dark">
-            <div class="text-primary"><span class="material-symbols-outlined text-4xl">local_florist</span></div>
-            <h2 class="text-text-dark font-serif text-2xl font-bold tracking-tight">Aurum Grove</h2>
-        </div>
-        <div class="hidden lg:flex items-center gap-10">
-            <a href="#home" class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Home</a>
-            <a href="#rooms" class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Suites</a>
-            <a href="#amenities" class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Amenities</a>
-        </div>
-        <div class="flex gap-4 items-center">
-            <a href="booking.html" class="flex items-center justify-center rounded-none border border-primary bg-primary hover:bg-transparent text-white hover:text-primary text-sm font-bold h-12 px-8 transition-all duration-300">
-                Book Your Stay
-            </a>
-        </div>
-    </div>
-</nav>
+<body
+    class="bg-background-light text-text-dark font-sans antialiased overflow-x-hidden selection:bg-primary-light selection:text-white">
 
-<!-- Hero Section -->
-<header class="relative min-h-[95vh] w-full flex flex-col justify-end pb-20 pt-32 px-4" id="home">
-    <div class="absolute inset-0 z-0 overflow-hidden">
-        <div class="w-full h-full bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style="background-image: url('images/hero.png');"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-10"></div>
-    </div>
-    
-    <div class="relative z-20 max-w-[1280px] w-full mx-auto animate-fade-in-up">
-        <span class="inline-block py-1 px-4 border border-white/30 bg-white/10 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-widest mb-6">Udaipur, India</span>
-        <h1 class="text-white font-serif text-5xl md:text-7xl font-bold leading-tight mb-6 max-w-4xl drop-shadow-lg">
-            Where Heritage Meets <br/><i class="font-light text-primary-light">Modern Luxury.</i>
-        </h1>
-        <p class="text-white/90 font-sans text-lg md:text-xl font-light leading-relaxed max-w-2xl mb-12 drop-shadow">
-            Experience the royal essence of Udaipur at Aurum Grove Hotel & Suites. A sanctuary of peace, elegance, and impeccable service.
-        </p>
-
-        <!-- Glassmorphism Booking Bar -->
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-2 md:p-4 shadow-2xl flex flex-col md:flex-row items-center gap-4 w-full max-w-5xl">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
-                <div class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer">
-                    <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Check-in</label>
-                    <input type="date" class="bg-transparent border-none text-text-dark text-lg font-serif focus:ring-0 p-0 cursor-pointer w-full outline-none" value="2026-06-01"/>
-                </div>
-                <div class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer">
-                    <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Check-out</label>
-                    <input type="date" class="bg-transparent border-none text-text-dark text-lg font-serif focus:ring-0 p-0 cursor-pointer w-full outline-none" value="2026-06-05"/>
-                </div>
-                <div class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer group">
-                    <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Guests</label>
-                    <div class="flex justify-between items-center text-text-dark text-lg font-serif">
-                        <span>2 Adults, 1 Room</span>
-                        <span class="material-symbols-outlined text-primary group-hover:translate-y-1 transition-transform">keyboard_arrow_down</span>
-                    </div>
-                </div>
+    <!-- Sticky Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-border-soft transition-all duration-300"
+        id="navbar">
+        <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3 text-text-dark">
+                <div class="text-primary"><span class="material-symbols-outlined text-4xl">local_florist</span></div>
+                <h2 class="text-text-dark font-serif text-2xl font-bold tracking-tight">Aurum Grove</h2>
             </div>
-            <a href="booking.html" class="w-full md:w-auto flex-shrink-0 bg-primary hover:bg-primary-dark text-white font-sans text-sm tracking-widest uppercase font-bold h-full min-h-[5rem] px-10 flex items-center justify-center transition-all shadow-glow hover:shadow-lg">
-                Check Availability
-            </a>
-        </div>
-    </div>
-</header>
-
-<!-- Trust Signals -->
-<section class="py-12 bg-surface-light border-b border-border-soft">
-    <div class="max-w-[1280px] mx-auto px-6 reveal">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-border-soft/50">
-            <div class="flex flex-col items-center text-center px-4">
-                <span class="material-symbols-outlined text-primary text-3xl mb-3">diamond</span>
-                <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">5-Star Luxury</h3>
-                <p class="text-text-muted text-sm mt-1">Award-winning comfort</p>
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="#home"
+                    class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Home</a>
+                <a href="#rooms"
+                    class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Suites</a>
+                <a href="#amenities"
+                    class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Amenities</a>
+                <a href="#contact"
+                    class="text-text-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-widest">Contact</a>
             </div>
-            <div class="flex flex-col items-center text-center px-4">
-                <span class="material-symbols-outlined text-primary text-3xl mb-3">location_on</span>
-                <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Prime Location</h3>
-                <p class="text-text-muted text-sm mt-1">Heart of Udaipur</p>
-            </div>
-            <div class="flex flex-col items-center text-center px-4">
-                <span class="material-symbols-outlined text-primary text-3xl mb-3">restaurant</span>
-                <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Fine Dining</h3>
-                <p class="text-text-muted text-sm mt-1">Culinary excellence</p>
-            </div>
-            <div class="flex flex-col items-center text-center px-4">
-                <span class="material-symbols-outlined text-primary text-3xl mb-3">spa</span>
-                <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Royal Spa</h3>
-                <p class="text-text-muted text-sm mt-1">Holistic wellness</p>
+            <div class="flex gap-4 items-center">
+                <a href="booking.html"
+                    class="flex items-center justify-center rounded-none border border-primary bg-primary hover:bg-transparent text-white hover:text-primary text-sm font-bold h-12 px-8 transition-all duration-300">
+                    Book Your Stay
+                </a>
             </div>
         </div>
-    </div>
-</section>
+    </nav>
 
-<!-- About Section -->
-<section class="py-24 bg-background-alt px-6" id="about">
-    <div class="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div class="relative reveal">
-            <div class="absolute -top-6 -left-6 w-full h-full border border-primary/30 z-0"></div>
-            <img src="images/about.png" alt="Hotel Interior" class="relative z-10 w-full h-[600px] object-cover shadow-2xl"/>
-            <div class="absolute -bottom-10 right-10 bg-white p-6 shadow-xl z-20 max-w-[280px]">
-                <div class="flex gap-1 text-primary mb-3">
-                    <span class="material-symbols-outlined text-sm filled">star</span>
-                    <span class="material-symbols-outlined text-sm filled">star</span>
-                    <span class="material-symbols-outlined text-sm filled">star</span>
-                    <span class="material-symbols-outlined text-sm filled">star</span>
-                    <span class="material-symbols-outlined text-sm filled">star</span>
-                </div>
-                <p class="text-text-dark font-serif italic text-sm mb-4">"A transcendent experience. The architecture and service are unparalleled."</p>
-                <div class="flex items-center gap-3">
-                    <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">SJ</div>
-                    <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest">Sarah Jenkins</h4>
-                        <p class="text-xs text-text-muted">London, UK</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <header class="relative min-h-[95vh] w-full flex flex-col justify-end pb-20 pt-32 px-4" id="home">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <div class="w-full h-full bg-cover bg-center transition-transform duration-[20s] hover:scale-105"
+                style="background-image: url('images/hero.png');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-10"></div>
         </div>
-        
-        <div class="reveal">
-            <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">The Aurum Experience</span>
-            <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight mb-6">A Canvas of <br/><i class="font-light">Timeless Elegance.</i></h2>
-            <p class="text-text-muted text-lg leading-relaxed mb-8 font-light">
-                Nestled amidst the serene landscapes of Udaipur, Aurum Grove offers an escape into a world of majestic splendor. Our spaces are thoughtfully designed to reflect the region's rich heritage, beautifully intertwined with contemporary comforts.
+
+        <div class="relative z-20 max-w-[1280px] w-full mx-auto animate-fade-in-up">
+            <span
+                class="inline-block py-1 px-4 border border-white/40 bg-black/30 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest mb-6">Udaipur,
+                India</span>
+            <h1
+                class="text-white font-serif text-5xl md:text-7xl font-bold leading-tight mb-6 max-w-4xl drop-shadow-[0_5px_20px_rgba(0,0,0,0.7)]">
+                Where Heritage Meets <br /><i class="font-light text-primary-light">Modern Luxury.</i>
+            </h1>
+            <p
+                class="text-white/95 font-sans text-lg md:text-xl font-medium leading-relaxed max-w-2xl mb-12 drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+                Experience the royal essence of Udaipur at Aurum Grove Hotel & Suites. A sanctuary of peace, elegance,
+                and impeccable service.
             </p>
-            <a href="#rooms" class="inline-flex items-center gap-2 text-text-dark border-b border-text-dark pb-1 hover:text-primary hover:border-primary transition-all font-medium uppercase tracking-widest text-sm">
-                Discover Our Suites <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
-            </a>
-        </div>
-    </div>
-</section>
 
-<!-- Suites Section -->
-<section class="py-24 bg-surface-light px-6" id="rooms">
-    <div class="max-w-[1280px] mx-auto reveal">
-        <div class="text-center mb-16">
-            <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">Accommodations</span>
-            <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight">Rooms & Suites</h2>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <!-- Room Card 1 -->
-            <div class="group cursor-pointer">
-                <div class="relative overflow-hidden mb-6 aspect-[4/5]">
-                    <img src="images/room-heritage.png" alt="Heritage Suite" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a href="booking.html" class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book Now</a>
+            <!-- Glassmorphism Booking Bar -->
+            <div
+                class="bg-white/10 backdrop-blur-md border border-white/20 p-2 md:p-4 shadow-2xl flex flex-col md:flex-row items-center gap-4 w-full max-w-5xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
+                    <div
+                        class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer">
+                        <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Check-in</label>
+                        <input type="date"
+                            class="bg-transparent border-none text-text-dark text-lg font-serif focus:ring-0 p-0 cursor-pointer w-full outline-none"
+                            value="2026-06-01" />
+                    </div>
+                    <div
+                        class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer">
+                        <label
+                            class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Check-out</label>
+                        <input type="date"
+                            class="bg-transparent border-none text-text-dark text-lg font-serif focus:ring-0 p-0 cursor-pointer w-full outline-none"
+                            value="2026-06-05" />
+                    </div>
+                    <div
+                        class="bg-white/80 backdrop-blur-sm p-4 flex flex-col hover:bg-white transition-colors cursor-pointer group">
+                        <label class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Guests</label>
+                        <div class="flex justify-between items-center text-text-dark text-lg font-serif">
+                            <span>2 Adults, 1 Room</span>
+                            <span
+                                class="material-symbols-outlined text-primary group-hover:translate-y-1 transition-transform">keyboard_arrow_down</span>
+                        </div>
                     </div>
                 </div>
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-text-dark font-serif text-2xl font-bold">Heritage Suite</h3>
-                    <span class="text-primary font-serif italic text-xl">$350<span class="text-sm text-text-muted not-italic font-sans">/night</span></span>
-                </div>
-                <p class="text-text-muted text-sm font-light mb-4">2 Guests • 45m² • Lake View</p>
+                <a href="booking.html"
+                    class="w-full md:w-auto flex-shrink-0 bg-primary hover:bg-primary-dark text-white font-sans text-sm tracking-widest uppercase font-bold h-full min-h-[5rem] px-10 flex items-center justify-center transition-all shadow-glow hover:shadow-lg">
+                    Check Availability
+                </a>
             </div>
+        </div>
+    </header>
 
-            <!-- Room Card 2 -->
-            <div class="group cursor-pointer">
-                <div class="relative overflow-hidden mb-6 aspect-[4/5]">
-                    <div class="absolute top-4 right-4 z-10 bg-primary text-white text-xs font-bold uppercase tracking-widest px-3 py-1 shadow-md">Signature</div>
-                    <img src="images/room-villa.png" alt="Royal Villa" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a href="booking.html" class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book Now</a>
+    <!-- Trust Signals -->
+    <section class="py-12 bg-surface-light border-b border-border-soft">
+        <div class="max-w-[1280px] mx-auto px-6 reveal">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-border-soft/50">
+                <div class="flex flex-col items-center text-center px-4">
+                    <span class="material-symbols-outlined text-primary text-3xl mb-3">diamond</span>
+                    <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">5-Star Luxury</h3>
+                    <p class="text-text-muted text-sm mt-1">Award-winning comfort</p>
+                </div>
+                <div class="flex flex-col items-center text-center px-4">
+                    <span class="material-symbols-outlined text-primary text-3xl mb-3">location_on</span>
+                    <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Prime Location</h3>
+                    <p class="text-text-muted text-sm mt-1">Heart of Udaipur</p>
+                </div>
+                <div class="flex flex-col items-center text-center px-4">
+                    <span class="material-symbols-outlined text-primary text-3xl mb-3">restaurant</span>
+                    <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Fine Dining</h3>
+                    <p class="text-text-muted text-sm mt-1">Culinary excellence</p>
+                </div>
+                <div class="flex flex-col items-center text-center px-4">
+                    <span class="material-symbols-outlined text-primary text-3xl mb-3">spa</span>
+                    <h3 class="text-text-dark font-bold text-sm uppercase tracking-widest">Royal Spa</h3>
+                    <p class="text-text-muted text-sm mt-1">Holistic wellness</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-24 bg-background-alt px-6" id="about">
+        <div class="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="relative reveal">
+                <div class="absolute -top-6 -left-6 w-full h-full border border-primary/30 z-0"></div>
+                <img src="images/about.png" alt="Hotel Interior"
+                    class="relative z-10 w-full h-[600px] object-cover shadow-2xl" />
+                <div class="absolute -bottom-10 right-10 bg-white p-6 shadow-xl z-20 max-w-[280px]">
+                    <div class="flex gap-1 text-primary mb-3">
+                        <span class="material-symbols-outlined text-sm filled">star</span>
+                        <span class="material-symbols-outlined text-sm filled">star</span>
+                        <span class="material-symbols-outlined text-sm filled">star</span>
+                        <span class="material-symbols-outlined text-sm filled">star</span>
+                        <span class="material-symbols-outlined text-sm filled">star</span>
+                    </div>
+                    <p class="text-text-dark font-serif italic text-sm mb-4">"A transcendent experience. The
+                        architecture and service are unparalleled."</p>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                            SJ</div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest">Sarah Jenkins</h4>
+                            <p class="text-xs text-text-muted">London, UK</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-text-dark font-serif text-2xl font-bold">Royal Villa</h3>
-                    <span class="text-primary font-serif italic text-xl">$650<span class="text-sm text-text-muted not-italic font-sans">/night</span></span>
-                </div>
-                <p class="text-text-muted text-sm font-light mb-4">4 Guests • 85m² • Private Pool</p>
             </div>
 
-            <!-- Room Card 3 -->
-            <div class="group cursor-pointer">
-                <div class="relative overflow-hidden mb-6 aspect-[4/5]">
-                    <img src="images/room-courtyard.png" alt="Courtyard Room" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a href="booking.html" class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book Now</a>
-                    </div>
-                </div>
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-text-dark font-serif text-2xl font-bold">Courtyard Room</h3>
-                    <span class="text-primary font-serif italic text-xl">$280<span class="text-sm text-text-muted not-italic font-sans">/night</span></span>
-                </div>
-                <p class="text-text-muted text-sm font-light mb-4">2 Guests • 35m² • Garden View</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Amenities Grid -->
-<section class="py-24 bg-background-light px-6 border-t border-border-soft" id="amenities">
-    <div class="max-w-[1280px] mx-auto reveal">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div>
-                <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">Curated Facilities</span>
-                <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight">Premium Amenities</h2>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[600px]">
-            <div class="col-span-2 row-span-2 relative group overflow-hidden cursor-pointer">
-                <img src="images/spa.png" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div class="absolute bottom-8 left-8">
-                    <h3 class="text-white font-serif text-3xl mb-2">Ayurvedic Spa</h3>
-                </div>
-            </div>
-            <div class="relative group overflow-hidden cursor-pointer">
-                <img src="images/dining.png" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                <div class="absolute bottom-6 left-6"><h3 class="text-white font-serif text-xl">Fine Dining</h3></div>
-            </div>
-            <div class="relative group overflow-hidden cursor-pointer">
-                <img src="images/pool.png" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                <div class="absolute bottom-6 left-6"><h3 class="text-white font-serif text-xl">Infinity Pool</h3></div>
-            </div>
-            <div class="col-span-2 relative group overflow-hidden cursor-pointer">
-                <img src="images/bar.png" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                <div class="absolute bottom-6 left-6"><h3 class="text-white font-serif text-2xl mb-1">The Maharaja Bar</h3></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="mt-24 border-t border-border-soft bg-white pt-16 pb-8">
-    <div class="max-w-[1280px] mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-3 text-primary mb-6">
-                    <span class="material-symbols-outlined text-4xl">local_florist</span>
-                    <h2 class="font-serif text-3xl font-bold text-text-dark">Aurum Grove</h2>
-                </div>
-                <p class="text-text-muted font-light leading-relaxed max-w-sm">
-                    Experience the pinnacle of luxury and heritage. A royal sanctuary designed for the modern traveler.
+            <div class="reveal">
+                <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">The Aurum
+                    Experience</span>
+                <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight mb-6">A Canvas of
+                    <br /><i class="font-light">Timeless Elegance.</i>
+                </h2>
+                <p class="text-text-muted text-lg leading-relaxed mb-8 font-light">
+                    Nestled amidst the serene landscapes of Udaipur, Aurum Grove offers an escape into a world of
+                    majestic splendor. Our spaces are thoughtfully designed to reflect the region's rich heritage,
+                    beautifully intertwined with contemporary comforts.
                 </p>
-            </div>
-            <div>
-                <h4 class="font-bold text-text-dark uppercase tracking-widest text-xs mb-6">Contact</h4>
-                <ul class="space-y-4 text-text-muted text-sm">
-                    <li class="font-bold text-text-dark flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px] text-primary">person</span>
-                        Anmol Yadav
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px] text-primary">phone</span>
-                        +91 7390 085 458
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px] text-primary">mail</span>
-                        anmol.yadav@aurumgrove.com
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
-                        Lake Pichola Road, Udaipur
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-text-dark uppercase tracking-widest text-xs mb-6">Legal</h4>
-                <ul class="space-y-4 text-text-muted text-sm">
-                    <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Cancellation Policy</a></li>
-                </ul>
+                <a href="#rooms"
+                    class="inline-flex items-center gap-2 text-text-dark border-b border-text-dark pb-1 hover:text-primary hover:border-primary transition-all font-medium uppercase tracking-widest text-sm">
+                    Discover Our Suites <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                </a>
             </div>
         </div>
-        <div class="border-t border-border-soft pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-text-muted font-bold uppercase tracking-widest">
-            <span>&copy; 2026 Aurum Grove Hotel & Suites. All rights reserved.</span>
-            <div class="flex gap-4 mt-4 md:mt-0">
-                <a href="#" class="hover:text-primary transition-colors">Instagram</a>
-                <a href="#" class="hover:text-primary transition-colors">Facebook</a>
-                <a href="#" class="hover:text-primary transition-colors">Twitter</a>
-            </div>
-        </div>
-    </div>
-</footer>
+    </section>
 
-<!-- Chatbot FAB -->
-<button onclick="toggleChatbot()" class="fixed bottom-8 right-8 bg-white text-text-dark border border-border-soft p-4 shadow-soft rounded-full flex items-center justify-center hover:scale-105 hover:border-primary transition-all z-50 group">
-    <span class="material-symbols-outlined text-primary group-hover:animate-pulse">smart_toy</span>
-</button>
+    <!-- Suites Section -->
+    <section class="py-24 bg-surface-light px-6" id="rooms">
+        <div class="max-w-[1280px] mx-auto reveal">
+            <div class="text-center mb-16">
+                <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">Accommodations</span>
+                <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight">Rooms & Suites</h2>
+            </div>
 
-<!-- Interactive Chatbot -->
-<div id="chatbot-container" class="hidden fixed bottom-24 right-8 w-80 bg-white border border-border-soft shadow-2xl rounded-2xl z-50 flex flex-col overflow-hidden">
-    <div class="bg-primary p-4 text-white flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined">support_agent</span>
-            <span class="font-bold">Aurum Concierge</span>
-        </div>
-        <button onclick="toggleChatbot()" class="hover:opacity-70"><span class="material-symbols-outlined text-sm">close</span></button>
-    </div>
-    <div id="chat-messages" class="h-64 overflow-y-auto p-4 bg-background-light flex flex-col gap-3 text-sm">
-        <div class="chat-message bg-white border border-border-soft p-3 rounded-xl rounded-tl-none self-start max-w-[85%] shadow-sm">
-            Namaste! I am the Aurum Concierge. How may I assist you with your booking or stay in Udaipur?
-        </div>
-    </div>
-    <div class="p-3 bg-white border-t border-border-soft flex gap-2">
-        <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-background-light border-none rounded-full px-4 py-2 text-sm focus:ring-1 focus:ring-primary" onkeypress="handleChatEnter(event)">
-        <button onclick="sendChatMessage()" class="bg-primary text-white rounded-full p-2 w-9 h-9 flex items-center justify-center hover:bg-primary-dark transition-colors">
-            <span class="material-symbols-outlined text-sm">send</span>
-        </button>
-    </div>
-</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Room Card 1 -->
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 aspect-[4/5]">
+                        <img src="images/room-heritage.png" alt="Heritage Suite"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div
+                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <a href="booking.html"
+                                class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book
+                                Now</a>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-text-dark font-serif text-2xl font-bold">Heritage Suite</h3>
+                        <span class="text-primary font-serif italic text-xl">$350<span
+                                class="text-sm text-text-muted not-italic font-sans">/night</span></span>
+                    </div>
+                    <p class="text-text-muted text-sm font-light mb-4">2 Guests • 45m² • Lake View</p>
+                </div>
 
-<script>
-    // Scroll Reveal
-    document.addEventListener("DOMContentLoaded", () => {
-        const reveals = document.querySelectorAll(".reveal");
-        const revealOnScroll = () => {
-            reveals.forEach((reveal) => {
-                if (reveal.getBoundingClientRect().top < window.innerHeight - 100) {
-                    reveal.classList.add("active");
-                }
+                <!-- Room Card 2 -->
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 aspect-[4/5]">
+                        <div
+                            class="absolute top-4 right-4 z-10 bg-primary text-white text-xs font-bold uppercase tracking-widest px-3 py-1 shadow-md">
+                            Signature</div>
+                        <img src="images/room-villa.png" alt="Royal Villa"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div
+                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <a href="booking.html"
+                                class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book
+                                Now</a>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-text-dark font-serif text-2xl font-bold">Royal Villa</h3>
+                        <span class="text-primary font-serif italic text-xl">$650<span
+                                class="text-sm text-text-muted not-italic font-sans">/night</span></span>
+                    </div>
+                    <p class="text-text-muted text-sm font-light mb-4">4 Guests • 85m² • Private Pool</p>
+                </div>
+
+                <!-- Room Card 3 -->
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden mb-6 aspect-[4/5]">
+                        <img src="images/room-courtyard.png" alt="Courtyard Room"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div
+                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <a href="booking.html"
+                                class="bg-white text-text-dark px-8 py-3 uppercase tracking-widest text-sm font-bold hover:bg-primary hover:text-white transition-colors">Book
+                                Now</a>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-text-dark font-serif text-2xl font-bold">Courtyard Room</h3>
+                        <span class="text-primary font-serif italic text-xl">$280<span
+                                class="text-sm text-text-muted not-italic font-sans">/night</span></span>
+                    </div>
+                    <p class="text-text-muted text-sm font-light mb-4">2 Guests • 35m² • Garden View</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amenities Grid -->
+    <section class="py-24 bg-background-light px-6 border-t border-border-soft" id="amenities">
+        <div class="max-w-[1280px] mx-auto reveal">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div>
+                    <span class="text-primary font-bold text-sm uppercase tracking-widest mb-4 block">Curated
+                        Facilities</span>
+                    <h2 class="text-text-dark font-serif text-4xl md:text-5xl font-bold leading-tight">Premium Amenities
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[600px]">
+                <div class="col-span-2 row-span-2 relative group overflow-hidden cursor-pointer">
+                    <img src="images/spa.png"
+                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-8 left-8">
+                        <h3 class="text-white font-serif text-3xl mb-2">Ayurvedic Spa</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden cursor-pointer">
+                    <img src="images/dining.png"
+                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-white font-serif text-xl">Fine Dining</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden cursor-pointer">
+                    <img src="images/pool.png"
+                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-white font-serif text-xl">Infinity Pool</h3>
+                    </div>
+                </div>
+                <div class="col-span-2 relative group overflow-hidden cursor-pointer">
+                    <img src="images/bar.png"
+                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <h3 class="text-white font-serif text-2xl mb-1">The Maharaja Bar</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-24 border-t border-border-soft bg-text-dark text-white pt-20 pb-10">
+        <div class="max-w-[1280px] mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-white/10 pb-16">
+                <!-- Brand -->
+                <div class="col-span-1 lg:col-span-1">
+                    <div class="flex items-center gap-3 text-primary mb-6">
+                        <span class="material-symbols-outlined text-4xl">local_florist</span>
+                        <h2 class="font-serif text-3xl font-bold text-white">Aurum Grove</h2>
+                    </div>
+                    <p class="text-white/70 font-light leading-relaxed mb-6 text-sm">
+                        Experience the pinnacle of luxury and heritage. A royal sanctuary designed for the modern
+                        traveler seeking an unforgettable escape.
+                    </p>
+                </div>
+                
+                <!-- Contact & Address -->
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-widest text-xs mb-6 border-b border-primary/30 inline-block pb-2">Contact Us</h4>
+                    <ul class="space-y-4 text-white/70 text-sm">
+                       
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-lg">call</span>
+                            <span>+91 7390 085 458</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-lg">mail</span>
+                            <span>Yadavanmol7390@gmail.com</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+                            <span>
+                             
+                                <strong>Address:</strong> Panasa Karachhana, Prayagraj, UP
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-widest text-xs mb-6 border-b border-primary/30 inline-block pb-2">Quick Links</h4>
+                    <ul class="space-y-3 text-white/70 text-sm">
+                        <li><a href="#about" class="hover:text-primary transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-xs">arrow_forward</span> About Us</a></li>
+                        <li><a href="#rooms" class="hover:text-primary transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-xs">arrow_forward</span> Suites & Rooms</a></li>
+                        <li><a href="#amenities" class="hover:text-primary transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-xs">arrow_forward</span> Amenities</a></li>
+                        <li><a href="booking.html" class="hover:text-primary transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-xs">arrow_forward</span> Book Now</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-widest text-xs mb-6 border-b border-primary/30 inline-block pb-2">Newsletter</h4>
+                    <p class="text-white/70 text-sm mb-4">Subscribe to receive exclusive offers and updates.</p>
+                    <form class="flex flex-col gap-3">
+                        <input type="email" placeholder="Email Address" class="bg-white/5 border border-white/20 text-white px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors w-full" />
+                        <button type="button" class="bg-primary hover:bg-primary-dark text-white text-sm font-bold uppercase tracking-widest py-3 transition-colors w-full">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-white/50 font-medium uppercase tracking-widest gap-6">
+                <span>&copy; 2026 Aurum Grove Hotel & Suites. All rights reserved.</span>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-primary transition-colors">Privacy</a>
+                    <span>|</span>
+                    <a href="#" class="hover:text-primary transition-colors">Terms</a>
+                    <span>|</span>
+                    <div class="flex gap-3 text-white ml-2">
+                        <a href="#" class="hover:text-primary transition-colors">IG</a>
+                        <a href="#" class="hover:text-primary transition-colors">FB</a>
+                        <a href="#" class="hover:text-primary transition-colors">TW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot FAB -->
+    <button onclick="toggleChatbot()"
+        class="fixed bottom-8 right-8 bg-white text-text-dark border border-border-soft p-4 shadow-soft rounded-full flex items-center justify-center hover:scale-105 hover:border-primary transition-all z-50 group">
+        <span class="material-symbols-outlined text-primary group-hover:animate-pulse">smart_toy</span>
+    </button>
+
+    <!-- Interactive Chatbot -->
+    <div id="chatbot-container"
+        class="hidden fixed bottom-24 right-8 w-80 bg-white border border-border-soft shadow-2xl rounded-2xl z-50 flex flex-col overflow-hidden">
+        <div class="bg-primary p-4 text-white flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined">support_agent</span>
+                <span class="font-bold">Aurum Concierge</span>
+            </div>
+            <button onclick="toggleChatbot()" class="hover:opacity-70"><span
+                    class="material-symbols-outlined text-sm">close</span></button>
+        </div>
+        <div id="chat-messages" class="h-64 overflow-y-auto p-4 bg-background-light flex flex-col gap-3 text-sm">
+            <div
+                class="chat-message bg-white border border-border-soft p-3 rounded-xl rounded-tl-none self-start max-w-[85%] shadow-sm">
+                Namaste! I am the Aurum Concierge. How may I assist you with your booking or stay in Udaipur?
+            </div>
+        </div>
+        <div class="p-3 bg-white border-t border-border-soft flex gap-2">
+            <input type="text" id="chat-input" placeholder="Type a message..."
+                class="flex-1 bg-background-light border-none rounded-full px-4 py-2 text-sm focus:ring-1 focus:ring-primary"
+                onkeypress="handleChatEnter(event)">
+            <button onclick="sendChatMessage()"
+                class="bg-primary text-white rounded-full p-2 w-9 h-9 flex items-center justify-center hover:bg-primary-dark transition-colors">
+                <span class="material-symbols-outlined text-sm">send</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Scroll Reveal
+        document.addEventListener("DOMContentLoaded", () => {
+            const reveals = document.querySelectorAll(".reveal");
+            const revealOnScroll = () => {
+                reveals.forEach((reveal) => {
+                    if (reveal.getBoundingClientRect().top < window.innerHeight - 100) {
+                        reveal.classList.add("active");
+                    }
+                });
+            };
+            window.addEventListener("scroll", revealOnScroll);
+            revealOnScroll();
+
+            const navbar = document.getElementById("navbar");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 50) navbar.classList.add("shadow-soft");
+                else navbar.classList.remove("shadow-soft");
             });
-        };
-        window.addEventListener("scroll", revealOnScroll);
-        revealOnScroll();
-        
-        const navbar = document.getElementById("navbar");
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 50) navbar.classList.add("shadow-soft");
-            else navbar.classList.remove("shadow-soft");
         });
-    });
 
-    // Chatbot Logic
-    const chatContainer = document.getElementById('chatbot-container');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
+        // Chatbot Logic
+        const chatContainer = document.getElementById('chatbot-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
 
-    function toggleChatbot() {
-        if (chatContainer.classList.contains('hidden')) {
-            chatContainer.classList.remove('hidden');
-            chatContainer.classList.add('visible');
-        } else {
-            chatContainer.classList.remove('visible');
-            chatContainer.classList.add('hidden');
+        function toggleChatbot() {
+            if (chatContainer.classList.contains('hidden')) {
+                chatContainer.classList.remove('hidden');
+                chatContainer.classList.add('visible');
+            } else {
+                chatContainer.classList.remove('visible');
+                chatContainer.classList.add('hidden');
+            }
         }
-    }
 
-    function handleChatEnter(e) {
-        if (e.key === 'Enter') sendChatMessage();
-    }
+        function handleChatEnter(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        }
 
-    function sendChatMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
-        
-        // Add user message
-        const userDiv = document.createElement('div');
-        userDiv.className = 'chat-message bg-primary text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm';
-        userDiv.innerText = text;
-        chatMessages.appendChild(userDiv);
-        chatInput.value = '';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
 
-        // Mock bot response
-        setTimeout(() => {
-            const botDiv = document.createElement('div');
-            botDiv.className = 'chat-message bg-white border border-border-soft p-3 rounded-xl rounded-tl-none self-start max-w-[85%] shadow-sm';
-            botDiv.innerHTML = `I would be happy to help you with that! Would you like me to connect you to reservations or show you our available <a href="booking.html" class="text-primary underline">Suites</a>?`;
-            chatMessages.appendChild(botDiv);
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-message bg-primary text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm';
+            userDiv.innerText = text;
+            chatMessages.appendChild(userDiv);
+            chatInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 1000);
-    }
-</script>
+
+            // Mock bot response
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.className = 'chat-message bg-white border border-border-soft p-3 rounded-xl rounded-tl-none self-start max-w-[85%] shadow-sm';
+                botDiv.innerHTML = `I would be happy to help you with that! Would you like me to connect you to reservations or show you our available <a href="booking.html" class="text-primary underline">Suites</a>?`;
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+    </script>
 </body>
+
 </html>
